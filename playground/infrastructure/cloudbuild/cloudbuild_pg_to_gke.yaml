@@ -39,11 +39,14 @@ steps:
         gcloud container clusters get-credentials --region '$_PLAYGROUND_ZONE' '$_GKE_NAME' --project '$PROJECT_ID'
         ./gradlew playground:terraform:prepareConfig -Pdns-name="$_DNS_NAME"
         echo "!!! Before"
-        df -h
-        ./gradlew -i playground:terraform:gkebackend -Pdocker-repository-root="$_DOCKER_REPOSITORY_ROOT" \
+        ./gradlew --stacktrace --debug -i playground:terraform:gkebackend -Pdocker-repository-root="$_DOCKER_REPOSITORY_ROOT" \
         -Pproject_environment="$_ENVIRONMENT_NAME" -Pdocker-tag="$_TAG" -Psdk-tag="$_SDK_TAG" -Pdns-name="$_DNS_NAME"
         echo "!!! After"
-        df -h
+        ls -la playground/infrastructure/helm-playground
+        cat playground/infrastructure/helm-playground/Chart.yaml
+        cat playground/infrastructure/helm-playground/values.yaml
+        helm version
+
 
 # This option enables writing logs to Cloud Logging
 options:
