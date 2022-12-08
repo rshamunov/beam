@@ -43,12 +43,12 @@ variable "name" {
 
 variable "tier" {
   description = "Tier of Redis. For tired 'STANDARD_HA' need set read_replicas_mode "
-  default     = "BASIC"
+  default     = "STANDARD_HA"
 }
 
 variable "replicas_mode" {
   description = "If enabled read endpoint will be provided and the instance can scale up and down the number of replicas"
-  default     = "READ_REPLICAS_DISABLED"
+  default     = "READ_REPLICAS_ENABLED"
 }
 
 variable "network" {
@@ -63,7 +63,7 @@ variable "subnetwork" {
 variable "replica_count" {
   type        = number
   description = "Redis's replica count"
-  default     = 0
+  default     = 1
 }
 
 variable "memory_size_gb" {
