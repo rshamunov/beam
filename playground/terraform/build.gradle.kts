@@ -57,14 +57,14 @@ tasks {
             environment = project.property("project_environment") as String
         }
         args(
-            "init", "-migrate-state",
-            "-backend-config=./environment/$environment/state.tfbackend",
-            "-var=environment=$environment",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "init", "-migrate-state",
+                "-backend-config=./environment/$environment/state.tfbackend",
+                "-var=environment=$environment",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
     /* refresh Infrastucture for remote state */
@@ -79,15 +79,15 @@ tasks {
             environment = project.property("project_environment") as String
         }
         args(
-            "refresh",
-            "-lock=false",
-            "-var=project_id=$project_id",
-            "-var=environment=$environment",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "refresh",
+                "-lock=false",
+                "-var=project_id=$project_id",
+                "-var=environment=$environment",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -107,18 +107,18 @@ tasks {
             environment
         }
         args(
-            "apply",
-            "-auto-approve",
-            "-lock=false",
-            "-target=module.applications",
-            "-var=project_id=$project_id",
-            "-var=environment=$environment",
-            "-var=docker_image_tag=$docker_tag",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "apply",
+                "-auto-approve",
+                "-lock=false",
+                "-target=module.applications",
+                "-var=project_id=$project_id",
+                "-var=environment=$environment",
+                "-var=docker_image_tag=$docker_tag",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -129,16 +129,16 @@ tasks {
             environment = project.property("project_environment") as String
         }
         args(
-            "apply",
-            "-auto-approve",
-            "-lock=false",
-            "-target=module.applications.module.backend",
-            "-var=environment=$environment",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "apply",
+                "-auto-approve",
+                "-lock=false",
+                "-target=module.applications.module.backend",
+                "-var=environment=$environment",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -158,18 +158,18 @@ tasks {
             environment
         }
         args(
-            "apply",
-            "-auto-approve",
-            "-lock=false",
-            "-target=module.applications.module.frontend",
-            "-var=project_id=$project_id",
-            "-var=environment=$environment",
-            "-var=docker_image_tag=$docker_tag",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "apply",
+                "-auto-approve",
+                "-lock=false",
+                "-target=module.applications.module.frontend",
+                "-var=project_id=$project_id",
+                "-var=environment=$environment",
+                "-var=docker_image_tag=$docker_tag",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -180,16 +180,16 @@ tasks {
             environment = project.property("project_environment") as String
         }
         args(
-            "apply",
-            "-auto-approve",
-            "-lock=false",
-            "-target=module.infrastructure",
-            "-var=environment=$environment",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "apply",
+                "-auto-approve",
+                "-lock=false",
+                "-target=module.infrastructure",
+                "-var=environment=$environment",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -201,7 +201,7 @@ tasks {
             project_id = project.property("project_id") as String
         }
         if (project.hasProperty("project_environment")) {
-        environment = project.property("project_environment") as String
+            environment = project.property("project_environment") as String
         }
         var docker_tag = if (project.hasProperty("docker-tag")) {
             project.property("docker-tag") as String
@@ -209,17 +209,17 @@ tasks {
             environment
         }
         args(
-            "apply",
-            "-auto-approve",
-            "-lock=false",
-            "-var=project_id=$project_id",
-            "-var=environment=$environment",
-            "-var=docker_image_tag=$docker_tag",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "apply",
+                "-auto-approve",
+                "-lock=false",
+                "-var=project_id=$project_id",
+                "-var=environment=$environment",
+                "-var=docker_image_tag=$docker_tag",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 
@@ -233,16 +233,16 @@ tasks {
             environment = project.property("project_environment") as String
         }
         args(
-            "destroy",
-            "-auto-approve",
-            "-lock=false",
-            "-var=project_id=$project_id",
-            "-var=environment=$environment",
-            if (file("./environment/$environment/terraform.tfvars").exists()) {
-                "-var-file=./environment/$environment/terraform.tfvars"
-            } else {
-                "-no-color"
-            }
+                "destroy",
+                "-auto-approve",
+                "-lock=false",
+                "-var=project_id=$project_id",
+                "-var=environment=$environment",
+                if (file("./environment/$environment/terraform.tfvars").exists()) {
+                    "-var-file=./environment/$environment/terraform.tfvars"
+                } else {
+                    "-no-color"
+                }
         )
     }
 }
@@ -290,14 +290,14 @@ tasks.register("prepareConfig") {
     doLast {
         var dns_name = ""
         if (project.hasProperty("dns-name")) {
-        dns_name = project.property("dns-name") as String
-          }
+            dns_name = project.property("dns-name") as String
+        }
         val configFileName = "config.g.dart"
         val modulePath = project(":playground:frontend").projectDir.absolutePath
         var file = File("$modulePath/lib/$configFileName")
 
         file.writeText(
-            """
+                """
 const String kAnalyticsUA = 'UA-73650088-2';
 const String kApiClientURL =
       'https://router.${dns_name}';
@@ -341,11 +341,11 @@ tasks.register("indexcreate") {
     group = "deploy"
     val indexpath = "../index.yaml"
     doLast{
-    exec {
-        executable("gcloud")
-    args("app", "deploy", indexpath)
+        exec {
+            executable("gcloud")
+            args("app", "deploy", indexpath)
+        }
     }
-   }
 }
 
 /* build, push, deploy Frontend app */
@@ -383,77 +383,77 @@ tasks.register("deployBackend") {
 }
 
 tasks.register("takeConfig") {
-  group = "deploy"
-  doLast {
-   var ipaddr = ""
-   var redis = ""
-   var proj = ""
-   var registry = ""
-   var ipaddrname = ""
-   var d_tag = ""
-   var dns_name = ""
-   var stdout = ByteArrayOutputStream()
-   if (project.hasProperty("dns-name")) {
-   dns_name = project.property("dns-name") as String
-      }
-   if (project.hasProperty("docker-tag")) {
-        d_tag = project.property("docker-tag") as String
-   }
-   exec {
-       commandLine = listOf("terraform", "output", "playground_static_ip_address")
-       standardOutput = stdout
-   }
-   ipaddr = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-
-   exec {
-       commandLine = listOf("terraform", "output", "playground_redis_ip")
-       standardOutput = stdout
-   }
-   redis = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-   exec {
-       commandLine = listOf("terraform", "output", "playground_gke_project")
-       standardOutput = stdout
-   }
-   proj = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-   exec {
-       commandLine = listOf("terraform", "output", "docker-repository-root")
-       standardOutput = stdout
-   }
-   registry = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-   exec {
-       commandLine = listOf("terraform", "output", "playground_static_ip_address_name")
-       standardOutput = stdout
-   }
-   ipaddrname = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-
-   val configFileName = "values.yaml"
-   val modulePath = project(":playground").projectDir.absolutePath
-   val file = File("$modulePath/infrastructure/helm-playground/$configFileName")
-       val lines = file.readLines()
-    val endOfSlice = lines.indexOfFirst { it.contains("static_ip") }
-    if (endOfSlice != -1) {
-        val oldContent = lines.slice(0 until endOfSlice)
-        val flagDelete = file.delete()
-        if (!flagDelete) {
-            throw kotlin.RuntimeException("Deleting file failed")
+    group = "deploy"
+    doLast {
+        var ipaddr = ""
+        var redis = ""
+        var proj = ""
+        var registry = ""
+        var ipaddrname = ""
+        var d_tag = ""
+        var dns_name = ""
+        var stdout = ByteArrayOutputStream()
+        if (project.hasProperty("dns-name")) {
+            dns_name = project.property("dns-name") as String
         }
-        val sb = kotlin.text.StringBuilder()
-        val lastLine = oldContent[oldContent.size - 1]
-        oldContent.forEach {
-            if (it == lastLine) {
-                sb.append(it)
-            } else {
-                sb.appendLine(it)
+        if (project.hasProperty("docker-tag")) {
+            d_tag = project.property("docker-tag") as String
+        }
+        exec {
+            commandLine = listOf("terraform", "output", "playground_static_ip_address")
+            standardOutput = stdout
+        }
+        ipaddr = stdout.toString().trim().replace("\"", "")
+        stdout = ByteArrayOutputStream()
+
+        exec {
+            commandLine = listOf("terraform", "output", "playground_redis_ip")
+            standardOutput = stdout
+        }
+        redis = stdout.toString().trim().replace("\"", "")
+        stdout = ByteArrayOutputStream()
+        exec {
+            commandLine = listOf("terraform", "output", "playground_gke_project")
+            standardOutput = stdout
+        }
+        proj = stdout.toString().trim().replace("\"", "")
+        stdout = ByteArrayOutputStream()
+        exec {
+            commandLine = listOf("terraform", "output", "docker-repository-root")
+            standardOutput = stdout
+        }
+        registry = stdout.toString().trim().replace("\"", "")
+        stdout = ByteArrayOutputStream()
+        exec {
+            commandLine = listOf("terraform", "output", "playground_static_ip_address_name")
+            standardOutput = stdout
+        }
+        ipaddrname = stdout.toString().trim().replace("\"", "")
+        stdout = ByteArrayOutputStream()
+
+        val configFileName = "values.yaml"
+        val modulePath = project(":playground").projectDir.absolutePath
+        val file = File("$modulePath/infrastructure/helm-playground/$configFileName")
+        val lines = file.readLines()
+        val endOfSlice = lines.indexOfFirst { it.contains("static_ip") }
+        if (endOfSlice != -1) {
+            val oldContent = lines.slice(0 until endOfSlice)
+            val flagDelete = file.delete()
+            if (!flagDelete) {
+                throw kotlin.RuntimeException("Deleting file failed")
             }
+            val sb = kotlin.text.StringBuilder()
+            val lastLine = oldContent[oldContent.size - 1]
+            oldContent.forEach {
+                if (it == lastLine) {
+                    sb.append(it)
+                } else {
+                    sb.appendLine(it)
+                }
+            }
+            file.writeText(sb.toString())
         }
-        file.writeText(sb.toString())
-    }
-   file.appendText("""
+        file.appendText("""
 static_ip: ${ipaddr}
 redis_ip: ${redis}:6379
 project_id: ${proj}
@@ -462,7 +462,7 @@ static_ip_name: ${ipaddrname}
 tag: $d_tag
 dns_name: ${dns_name}
     """)
- }
+    }
 }
 
 helm {
@@ -477,22 +477,22 @@ helm {
     }
 }
 task("gkebackend") {
-  group = "deploy"
-  val init = tasks.getByName("terraformInit")
-  val takeConfig = tasks.getByName("takeConfig")
-  val back = tasks.getByName("pushBack")
-  val front = tasks.getByName("pushFront")
-  val indexcreate = tasks.getByName("indexcreate")
-  val helm = tasks.getByName("helmInstallPlayground")
-  dependsOn(init)
-  dependsOn(takeConfig)
-  dependsOn(back)
-  dependsOn(front)
-  dependsOn(indexcreate)
-  dependsOn(helm)
-  takeConfig.mustRunAfter(init)
-  back.mustRunAfter(takeConfig)
-  front.mustRunAfter(back)
-  indexcreate.mustRunAfter(front)
-  helm.mustRunAfter(indexcreate)
+    group = "deploy"
+    val init = tasks.getByName("terraformInit")
+    val takeConfig = tasks.getByName("takeConfig")
+    val back = tasks.getByName("pushBack")
+    val front = tasks.getByName("pushFront")
+    val indexcreate = tasks.getByName("indexcreate")
+    val helm = tasks.getByName("helmInstallPlayground")
+    dependsOn(init)
+    dependsOn(takeConfig)
+    dependsOn(back)
+    dependsOn(front)
+    dependsOn(indexcreate)
+    dependsOn(helm)
+    takeConfig.mustRunAfter(init)
+    back.mustRunAfter(takeConfig)
+    front.mustRunAfter(back)
+    indexcreate.mustRunAfter(front)
+    helm.mustRunAfter(indexcreate)
 }
