@@ -63,7 +63,7 @@ variable "subnetwork" {
 variable "replica_count" {
   type        = number
   description = "Redis's replica count"
-  default     = 1
+  default     = 0
 }
 
 variable "memory_size_gb" {
