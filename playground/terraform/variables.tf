@@ -80,13 +80,13 @@ variable "redis_name" {
 
 variable "redis_tier" {
   description = "Tier of Redis"
-  default     = "STANDARD_HA"
+  default     = "BASIC"
 }
 
-variable "redis_replica_count" {
-  description = "Redis's replica count"
-  default     = 1
-}
+# variable "redis_replica_count" {
+#   description = "Redis's replica count"
+#   default     = 1
+# }
 
 variable "redis_memory_size_gb" {
   description = "Size of Redis memory ,  if set 'read replica' it must be from 5GB to 100GB."

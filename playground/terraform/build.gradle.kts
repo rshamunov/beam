@@ -398,7 +398,10 @@ tasks.register("takeConfig") {
       }
    if (project.hasProperty("docker-tag")) {
         d_tag = project.property("docker-tag") as String
-   }
+      }
+   if (project.hasProperty("docker-repository-root")) {
+        registry = project.property("docker-repository-root") as String
+      }
    exec {
        commandLine = listOf("terraform", "output", "playground_static_ip_address")
        standardOutput = stdout
@@ -412,18 +415,14 @@ tasks.register("takeConfig") {
    }
    redis = stdout.toString().trim().replace("\"", "")
    stdout = ByteArrayOutputStream()
+
    exec {
        commandLine = listOf("terraform", "output", "playground_gke_project")
        standardOutput = stdout
    }
    proj = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-   exec {
-       commandLine = listOf("terraform", "output", "docker-repository-root")
-       standardOutput = stdout
-   }
-   registry = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
+   stdout = ByteArrayOutputStream() 
+
    exec {
        commandLine = listOf("terraform", "output", "playground_static_ip_address_name")
        standardOutput = stdout
@@ -499,4 +498,3 @@ tasks.register("gkebackend") {
   indexcreateTask.mustRunAfter(pushFrontTask)
   helmTask.mustRunAfter(indexcreateTask)
 }
-

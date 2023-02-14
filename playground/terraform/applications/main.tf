@@ -31,7 +31,7 @@ module "backend" {
   source                  = "./backend"
   project_id              = var.project_id
   cache_address           = data.terraform_remote_state.playground-state.outputs.playground_redis_ip
-  docker_registry_address = data.terraform_remote_state.playground-state.outputs.docker-repository-root
+  docker_registry_address = var.docreproot
   network_name            = data.terraform_remote_state.playground-state.outputs.playground_network_name
   subnetwork_name         = data.terraform_remote_state.playground-state.outputs.playground_subnetwork_name
   environment             = var.environment
@@ -70,7 +70,7 @@ module "frontend" {
 
   source                  = "./frontend"
   project_id              = var.project_id
-  docker_registry_address = data.terraform_remote_state.playground-state.outputs.docker-repository-root
+  docker_registry_address = var.docreproot
   network_name            = data.terraform_remote_state.playground-state.outputs.playground_network_name
   subnetwork_name         = data.terraform_remote_state.playground-state.outputs.playground_subnetwork_name
   environment             = var.environment

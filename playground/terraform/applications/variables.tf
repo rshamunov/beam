@@ -21,6 +21,10 @@ variable "project_id" {
   description = "The GCP Project ID where Playground Applications will be created"
 }
 
+variable "docreproot" {
+  default = "us-central1-docker.pkg.dev/apache-beam-testing/playground-repository"
+}
+
 variable "environment" {
   description = "Environment name, e.g. prod,dev,beta"
   default     = "dev"
