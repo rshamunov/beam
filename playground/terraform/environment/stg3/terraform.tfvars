@@ -6,4 +6,4 @@ location             = "us-west1-a"
 state_bucket         = "stg3-beam-playground-us-west"
 redis_name           = "beam-playground-redis-stg3"
 min_count            = 1
-max_count            = 4
+max_count            = 2

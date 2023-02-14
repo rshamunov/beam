@@ -256,11 +256,7 @@ tasks.register("setDockerRegistry") {
     try {
         var stdout = ByteArrayOutputStream()
         //set Docker Registry
-        exec {
-            commandLine = listOf("terraform", "output", "docker-repository-root")
-            standardOutput = stdout
-        }
-        project.rootProject.extra["docker-repository-root"] = stdout.toString().trim().replace("\"", "")
+        project.rootProject.extra["docker-repository-root"] = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
     } catch (e: Exception) {
     }
 }
@@ -314,11 +310,8 @@ const String kApiScioClientURL =
         try {
             var stdout = ByteArrayOutputStream()
             //set Docker Registry
-            exec {
-                commandLine = listOf("terraform", "output", "docker-repository-root")
-                standardOutput = stdout
-            }
-            project.rootProject.extra["docker-repository-root"] = stdout.toString().trim().replace("\"", "")
+            project.rootProject.extra["docker-repository-root"] = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
+    } catch (e: Exception) {
         } catch (e: Exception) {
         }
     }
@@ -400,12 +393,8 @@ tasks.register("takeConfig") {
         d_tag = project.property("docker-tag") as String
       }
    if (project.hasProperty("docker-repository-root")) {
-        registry = project.property("docker-repository-root") as String
+        registry = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
       }
-   exec {
-       commandLine = listOf("terraform", "output", "playground_static_ip_address")
-       standardOutput = stdout
-   }
    ipaddr = stdout.toString().trim().replace("\"", "")
    stdout = ByteArrayOutputStream()
 

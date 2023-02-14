@@ -63,12 +63,12 @@ variable "bucket_terraform_state_storage_class" {
 
 variable "repository_id" {
   description = "ID of Artifact Registry"
-  default     = "playground-repository"
+  default     = "playground-repository-stg3"
 }
 
 variable "repository_location" {
   description = "Location of Artifact Registry"
-  default     = "us-central1"
+  default     = "us-west1"
 }
 
 variable "repository_domain" {
@@ -84,12 +84,12 @@ variable "redis_version" {
 
 variable "redis_region" {
   description = "Region of Redis"
-  default     = "us-central1"
+  default     = "us-west1"
 }
 
 variable "redis_name" {
   description = "Name of Redis"
-  default     = "playground-backend-cache"
+  default     = "playground-backend-cache-stg3"
 }
 
 variable "redis_tier" {
@@ -116,29 +116,29 @@ variable "read_replicas_mode" {
 
 variable "network_name" {
   description = "Name of VPC to be created"
-  default     = "playground-vpc"
+  default     = "playground-vpc-stg3"
 }
 
 variable "subnetwork_name" {
   description = "Name of VPC to be created"
-  default     = "playground-vpc-sub"
+  default     = "playground-vpc-sub-stg3"
 }
 
 variable "network_region" {
   description = "Region of Redis"
-  default     = "us-central1"
+  default     = "us-west1"
 }
 
 # GKE
 
 variable "gke_machine_type" {
   description = "Node pool machine types"
-  default     = "e2-standard-4"
+  default     = "c2-standard-16"
 }
 
 variable "gke_name" {
   description = "Name of GKE cluster"
-  default     = "playground-examples"
+  default     = "playground-examples-stg3"
 }
 
 variable "gke_location" {
@@ -151,10 +151,10 @@ variable "location" {
 
 variable "min_count" {
   description = "Min cluster node count"
-  default     = 2
+  default     = 1
 }
 
 variable "max_count" {
   description = "Max cluster node count"
-  default     = 6
+  default     = 2
 }
