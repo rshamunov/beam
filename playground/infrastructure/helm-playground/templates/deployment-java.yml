@@ -54,11 +54,11 @@ spec:
          periodSeconds: {{ .Values.healthcheck.readPeriodSeconds }}
        resources:
          requests:
-           memory: "7000Mi"
-           cpu: "3750m"
+           memory: "1500Mi"
+           cpu: "3000m"
          limits:
-           cpu: "3750m"
-           memory: "7500Mi"
+           cpu: "3000m"
+           memory: "1500Mi"
   replicas: {{ .Values.replicaCount  }}
   selector:
     matchLabels:

@@ -22,7 +22,7 @@ variable "project_id" {
 }
 
 variable "docreproot" {
-  default = "us-central1-docker.pkg.dev/apache-beam-testing/playground-repository"
+  default = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
 }
 
 variable "environment" {

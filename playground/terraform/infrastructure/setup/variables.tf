@@ -23,7 +23,7 @@ variable "project_id" {
 
 variable "service_account_id" {
   description = "Service account ID"
-  default     = "beam-playground-stg-west1"
+  default     = "beam-playground-stg3-west1"
 }
 
 

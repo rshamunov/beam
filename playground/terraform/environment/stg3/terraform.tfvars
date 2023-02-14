@@ -1,0 +1,9 @@
+project_id           = "apache-beam-testing"
+network_name         = "stg3-playground"
+gke_name             = "stg3-playground-us-west"
+region               = "us-west1"
+location             = "us-west1-a"
+state_bucket         = "stg3-beam-playground-us-west"
+redis_name           = "beam-playground-redis-stg3"
+min_count            = 1
+max_count            = 4
