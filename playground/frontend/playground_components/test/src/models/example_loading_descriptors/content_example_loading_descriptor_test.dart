@@ -61,5 +61,9 @@ void main() {
         ),
       );
     });
+
+    test('token == null', () {
+      expect(descriptor.token, null);
+    });
   });
 }

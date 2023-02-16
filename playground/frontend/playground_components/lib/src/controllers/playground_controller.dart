@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../cache/example_cache.dart';
+import '../models/event_snippet_context.dart';
 import '../models/example.dart';
 import '../models/example_base.dart';
 import '../models/example_loading_descriptors/empty_example_loading_descriptor.dart';
@@ -122,6 +123,10 @@ class PlaygroundController with ChangeNotifier {
 
     return controller;
   }
+
+  /// [EventSnippetContext] of the current [SnippetEditingController].
+  EventSnippetContext get eventSnippetContext =>
+      snippetEditingController?.eventSnippetContext ?? EventSnippetContext.empty;
 
   String? get source =>
       snippetEditingController?.activeFileController?.codeController.fullText;

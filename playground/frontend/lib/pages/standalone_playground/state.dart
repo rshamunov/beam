@@ -18,10 +18,13 @@
 
 import 'package:app_state/app_state.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:playground_components/playground_components.dart';
 
 import '../../controllers/factories.dart';
 import '../../modules/examples/models/example_loading_descriptors/no_url_example_loading_descriptor.dart';
+import '../../services/analytics/events/constants.dart';
+import '../enum.dart';
 import 'path.dart';
 
 /// Subclasses of [ExampleLoadingDescriptor] that will no show in the URL.
@@ -33,11 +36,22 @@ const _cutUrlDescriptors = {
 class StandalonePlaygroundNotifier extends ChangeNotifier
     with PageStateMixin<void> {
   final PlaygroundController playgroundController;
+  final windowCloseNotifier = GetIt.instance.get<WindowCloseNotifier>();
 
   StandalonePlaygroundNotifier({
     required ExamplesLoadingDescriptor initialDescriptor,
   }) : playgroundController = createPlaygroundController(initialDescriptor) {
     playgroundController.addListener(_onPlaygroundControllerChanged);
+    windowCloseNotifier.addListener(dispose);
+
+    // This adds the layout to all events sent from now on.
+    // Ideally we want to set/unset that when this page becomes topmost
+    // or loses that, but we have no API for that so far.
+    // See https://github.com/alexeyinkin/flutter-app-state/issues/23
+    // Anyway we do not switch between embedded/standalone at runtime.
+    PlaygroundComponents.analyticsService.defaultEventParameters = {
+      PlaygroundEventParams.layout: PagesEnum.standalonePlayground.name,
+    };
   }
 
   void _onPlaygroundControllerChanged() {
@@ -63,5 +77,13 @@ class StandalonePlaygroundNotifier extends ChangeNotifier
     return _cutUrlDescriptors.contains(descriptor.runtimeType)
         ? const NoUrlExampleLoadingDescriptor()
         : descriptor;
+  }
+
+  @override
+  Future<void> dispose() async {
+    playgroundController.codeRunner.cancelRun();
+    playgroundController.dispose();
+    windowCloseNotifier.removeListener(dispose);
+    super.dispose();
   }
 }

@@ -28,6 +28,7 @@ import 'router/route_information_parser.dart';
 Future<void> initializeServiceLocator() async {
   _initializeRepositories();
   _initializeRouter();
+  _initializeServices();
 }
 
 void _initializeRepositories() {
@@ -61,4 +62,15 @@ void _initializeRouter() {
     PlaygroundRouteInformationParser(),
   );
   print('Initialized PageStackRouteInformationParser');
+}
+
+void _initializeServices() {
+  GetIt.instance.registerSingleton(WindowCloseNotifier());
+
+  final googleAnalyticsService = GoogleAnalytics4Service(
+    propertyId: kAnalyticsUA,
+  );
+  GetIt.instance.registerSingleton<AnalyticsService>(
+    googleAnalyticsService,
+  );
 }

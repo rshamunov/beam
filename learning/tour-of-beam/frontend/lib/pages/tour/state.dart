@@ -43,6 +43,7 @@ class TourNotifier extends ChangeNotifier with PageStateMixin<void> {
   final _unitContentCache = GetIt.instance.get<UnitContentCache>();
   final _unitProgressCache = GetIt.instance.get<UnitProgressCache>();
   UnitContentModel? _currentUnitContent;
+  DateTime? _currentUnitOpenedAt;
 
   TourNotifier({
     required String initialSdkId,
@@ -65,7 +66,7 @@ class TourNotifier extends ChangeNotifier with PageStateMixin<void> {
         treeIds: contentTreeController.treeIds,
       );
 
-  String? get currentUnitId => currentUnitController?.unitId;
+  String? get currentUnitId => currentUnitController?.unit.id;
   UnitContentModel? get currentUnitContent => _currentUnitContent;
   bool get doesCurrentUnitHaveSolution =>
       currentUnitContent?.solutionSnippetId != null;
@@ -88,10 +89,10 @@ class TourNotifier extends ChangeNotifier with PageStateMixin<void> {
     }
   }
 
-  void _createCurrentUnitController(String sdkId, String unitId) {
+  void _createCurrentUnitController(Sdk sdk, UnitModel unit) {
     currentUnitController = UnitController(
-      unitId: unitId,
-      sdkId: sdkId,
+      unit: unit,
+      sdk: sdk,
     );
   }
 
@@ -113,12 +114,8 @@ class TourNotifier extends ChangeNotifier with PageStateMixin<void> {
     final currentNode = contentTreeController.currentNode;
     if (currentNode is UnitModel) {
       final sdk = contentTreeController.sdk;
-      final content = _unitContentCache.getUnitContent(
-        sdk.id,
-        currentNode.id,
-      );
-      _createCurrentUnitController(contentTreeController.sdkId, currentNode.id);
-      _setCurrentUnitContent(content);
+      _createCurrentUnitController(contentTreeController.sdk, currentNode);
+      _setCurrentUnitContent(currentNode, sdk: sdk);
     } else {
       _emptyPlayground();
     }
@@ -126,16 +123,30 @@ class TourNotifier extends ChangeNotifier with PageStateMixin<void> {
     notifyListeners();
   }
 
-  Future<void> _setCurrentUnitContent(UnitContentModel? content) async {
+  Future<void> _setCurrentUnitContent(
+    UnitModel unit, {
+    required Sdk sdk,
+  }) async {
+    final content = _unitContentCache.getUnitContent(
+      sdk.id,
+      unit.id,
+    );
     if (content == _currentUnitContent) {
       return;
     }
 
-    _currentUnitContent = content;
+    if (_currentUnitOpenedAt != null && _currentUnitContent != null) {
+      // TODO: Send close unit event.
+    }
 
+    _currentUnitContent = content;
     if (content == null) {
       return;
     }
+
+    _currentUnitOpenedAt = DateTime.now();
+    // TODO: Send open unit event.
+
     final taskSnippetId = content.taskSnippetId;
     await _setPlaygroundSnippet(taskSnippetId);
     _isShowingSolution = false;

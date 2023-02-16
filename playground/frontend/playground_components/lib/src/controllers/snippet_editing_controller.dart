@@ -19,6 +19,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 
+import '../models/event_snippet_context.dart';
 import '../models/example.dart';
 import '../models/example_loading_descriptors/content_example_loading_descriptor.dart';
 import '../models/example_loading_descriptors/empty_example_loading_descriptor.dart';
@@ -227,5 +228,15 @@ class SnippetEditingController extends ChangeNotifier {
 
   List<SnippetFile> getFiles() {
     return _fileControllers.map((c) => c.getFile()).toList(growable: false);
+  }
+
+  EventSnippetContext get eventSnippetContext {
+    final descriptor = getLoadingDescriptor();
+
+    return EventSnippetContext(
+      originalSnippet: _descriptor?.token,
+      sdk: sdk,
+      snippet: descriptor.token,
+    );
   }
 }

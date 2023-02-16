@@ -16,14 +16,23 @@
  * limitations under the License.
  */
 
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
-class CloseListener extends StatelessWidget {
-  final Widget child;
-  const CloseListener({Key? key, required this.child}) : super(key: key);
+import '../events/abstract.dart';
+import 'google_analytics4_service.dart';
+
+@internal
+GoogleAnalytics4Service createGoogleAnalytics4Service({
+  required String propertyId,
+}) =>
+    GoogleAnalytics4ServiceNonWeb();
+
+/// The required placeholder for non-web builds, e.g. unit tests.
+class GoogleAnalytics4ServiceNonWeb extends GoogleAnalytics4Service {
+  GoogleAnalytics4ServiceNonWeb() : super.create();
 
   @override
-  Widget build(BuildContext context) {
-    return child;
+  Future<void> sendProtected(AnalyticsEvent event) {
+    throw UnimplementedError();
   }
 }

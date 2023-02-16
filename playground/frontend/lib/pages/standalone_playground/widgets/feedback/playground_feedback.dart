@@ -18,11 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:playground_components/playground_components.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constants/font_weight.dart';
-import '../../../../modules/analytics/analytics_service.dart';
-import '../../../../src/assets/assets.gen.dart';
 import '../../notifiers/feedback_state.dart';
 import 'feedback_dropdown_icon_button.dart';
 
@@ -35,40 +34,56 @@ class PlaygroundFeedback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations appLocale = AppLocalizations.of(context)!;
-    final isEnjoying = _getFeedbackState(context, true).isEnjoying;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.enjoyingPlayground,
-          style: const TextStyle(fontWeight: kBoldWeight),
-        ),
-        FeedbackDropdownIconButton(
-          key: thumbUpKey,
-          label: appLocale.enjoying,
-          iconAsset: Assets.thumbUp,
-          filledIconAsset: Assets.thumbUpFilled,
-          onClick: _setEnjoying(context, true),
-          isSelected: isEnjoying != null && isEnjoying,
-        ),
-        FeedbackDropdownIconButton(
-          key: thumbDownKey,
-          label: appLocale.notEnjoying,
-          iconAsset: Assets.thumbDown,
-          filledIconAsset: Assets.thumbDownFilled,
-          onClick: _setEnjoying(context, false),
-          isSelected: isEnjoying != null && !isEnjoying,
-        ),
-      ],
+    return Consumer<PlaygroundController>(
+      builder: (context, playgroundController, child) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.enjoyingPlayground,
+            style: const TextStyle(fontWeight: kBoldWeight),
+          ),
+          FeedbackDropdownIconButton(
+            key: thumbUpKey,
+            feedbackRating: FeedbackRating.positive,
+            isSelected: _getFeedbackState(context, true).feedbackRating ==
+                FeedbackRating.positive,
+            onClick: () => _onRated(
+              context,
+              FeedbackRating.positive,
+              playgroundController,
+            ),
+            playgroundController: playgroundController,
+          ),
+          FeedbackDropdownIconButton(
+            key: thumbDownKey,
+            feedbackRating: FeedbackRating.negative,
+            isSelected: _getFeedbackState(context, true).feedbackRating ==
+                FeedbackRating.negative,
+            onClick: () => _onRated(
+              context,
+              FeedbackRating.negative,
+              playgroundController,
+            ),
+            playgroundController: playgroundController,
+          ),
+        ],
+      ),
     );
   }
 
-  _setEnjoying(BuildContext context, bool isEnjoying) {
-    return () {
-      _getFeedbackState(context, false).setEnjoying(isEnjoying);
-      AnalyticsService.get(context).trackClickEnjoyPlayground(isEnjoying);
-    };
+  void _onRated(
+    BuildContext context,
+    FeedbackRating rating,
+    PlaygroundController playgroundController,
+  ) {
+    _getFeedbackState(context, false).setEnjoying(rating);
+
+    PlaygroundComponents.analyticsService.sendUnawaited(
+      RatedAnalyticsEvent(
+        snippetContext: playgroundController.eventSnippetContext,
+        rating: rating,
+      ),
+    );
   }
 
   FeedbackState _getFeedbackState(BuildContext context, bool listen) {

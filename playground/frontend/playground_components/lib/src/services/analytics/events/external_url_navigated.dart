@@ -16,29 +16,22 @@
  * limitations under the License.
  */
 
-import 'package:equatable/equatable.dart';
+import 'abstract.dart';
+import 'constants.dart';
 
-class AnalyticsEvent with EquatableMixin {
-  final String action;
-  final String category;
-  final String? label;
-  final Map<String, String>? parameters;
-  final int? value;
+/// Clicked any external link that does not have a dedicated event.
+class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
+  const ExternalUrlNavigatedAnalyticsEvent({
+    required this.url,
+  }) : super(
+          name: BeamAnalyticsEvents.externalUrlNavigated,
+        );
 
-  AnalyticsEvent({
-    required this.action,
-    required this.category,
-    this.label,
-    this.parameters,
-    this.value,
-  });
+  final Uri url;
 
   @override
-  List<Object?> get props => [
-        action,
-        category,
-        label,
-        parameters,
-        value,
-      ];
+  Map<String, dynamic> toJson() => {
+        ...super.toJson(),
+        EventParams.url: url.toString(),
+      };
 }
