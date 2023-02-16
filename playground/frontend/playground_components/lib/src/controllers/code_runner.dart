@@ -123,7 +123,8 @@ class CodeRunner extends ChangeNotifier {
 
   Future<void> cancelRun() async {
     snippetEditingController = null;
-    await _runSubscription?.cancel();
+    //TODO: https://github.com/apache/beam/issues/25213
+    unawaited(_runSubscription?.cancel()); 
     final pipelineUuid = _result?.pipelineUuid ?? '';
 
     if (pipelineUuid.isNotEmpty) {
@@ -150,6 +151,10 @@ class CodeRunner extends ChangeNotifier {
     notifyListeners();
     // add a little delay to improve user experience
     await Future.delayed(kPrecompiledDelay);
+
+    if (_result?.status != RunCodeStatus.preparation) {
+      return;
+    }
 
     final String logs = selectedExample.logs ?? '';
     _result = RunCodeResult(

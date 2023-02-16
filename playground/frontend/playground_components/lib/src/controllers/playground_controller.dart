@@ -37,6 +37,7 @@ import '../models/shortcut.dart';
 import '../repositories/code_repository.dart';
 import '../services/symbols/loaders/map.dart';
 import '../services/symbols/symbols_notifier.dart';
+import '../util/logical_keyboard_key.dart';
 import 'code_runner.dart';
 import 'example_loaders/examples_loader.dart';
 import 'output_filter_type_controller.dart';
@@ -253,6 +254,13 @@ class PlaygroundController with ChangeNotifier {
     await codeRunner.cancelRun();
     snippetEditingController?.reset();
     codeRunner.clearResult();
+    notifyListeners();
+  }
+
+  void showSuggestions() {
+    snippetEditingController?.activeFileController?.codeController
+        .generateSuggestions();
+    notifyListeners();
   }
 
   void resetErrorMessageText() {
@@ -309,7 +317,7 @@ class PlaygroundController with ChangeNotifier {
 
   late BeamShortcut runShortcut = BeamShortcut(
     shortcuts: LogicalKeySet(
-      LogicalKeyboardKey.meta,
+      LogicalKeyboardKeyExtension.metaOrControl,
       LogicalKeyboardKey.enter,
     ),
     actionIntent: const RunIntent(),
@@ -320,7 +328,7 @@ class PlaygroundController with ChangeNotifier {
 
   late BeamShortcut resetShortcut = BeamShortcut(
     shortcuts: LogicalKeySet(
-      LogicalKeyboardKey.meta,
+      LogicalKeyboardKeyExtension.metaOrControl,
       LogicalKeyboardKey.shift,
       LogicalKeyboardKey.keyE,
     ),
@@ -330,9 +338,22 @@ class PlaygroundController with ChangeNotifier {
     ),
   );
 
+  late BeamShortcut showSuggestionsShortcut = BeamShortcut(
+    shortcuts: LogicalKeySet(
+      LogicalKeyboardKeyExtension.metaOrControl,
+      LogicalKeyboardKey.shift,
+      LogicalKeyboardKey.keyS,
+    ),
+    actionIntent: const ShowSuggestionsIntent(),
+    createAction: (BuildContext context) => CallbackAction(
+      onInvoke: (_) => showSuggestions(),
+    ),
+  );
+
   List<BeamShortcut> get shortcuts => [
         runShortcut,
         resetShortcut,
+        showSuggestionsShortcut,
       ];
 
   @override
