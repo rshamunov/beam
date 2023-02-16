@@ -256,11 +256,7 @@ tasks.register("setDockerRegistry") {
     try {
         var stdout = ByteArrayOutputStream()
         //set Docker Registry
-        exec {
-            commandLine = listOf("terraform", "output", "docker-repository-root")
-            standardOutput = stdout
-        }
-        project.rootProject.extra["docker-repository-root"] = stdout.toString().trim().replace("\"", "")
+        project.rootProject.extra["docker-repository-root"] = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
     } catch (e: Exception) {
     }
 }
@@ -332,11 +328,8 @@ const String kApiScioClientURL =
         try {
             var stdout = ByteArrayOutputStream()
             //set Docker Registry
-            exec {
-                commandLine = listOf("terraform", "output", "docker-repository-root")
-                standardOutput = stdout
-            }
-            project.rootProject.extra["docker-repository-root"] = stdout.toString().trim().replace("\"", "")
+            project.rootProject.extra["docker-repository-root"] = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
+    } catch (e: Exception) {
         } catch (e: Exception) {
         }
     }
@@ -417,14 +410,13 @@ tasks.register("takeConfig") {
       }
    if (project.hasProperty("docker-tag")) {
         d_tag = project.property("docker-tag") as String
-   }
+      }
    if (project.hasProperty("datastore_namespace")) {
         datastore_name = project.property("datastore_namespace") as String
    }
-   exec {
-       commandLine = listOf("terraform", "output", "playground_static_ip_address")
-       standardOutput = stdout
-   }
+   if (project.hasProperty("docker-repository-root")) {
+        registry = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
+      }
    ipaddr = stdout.toString().trim().replace("\"", "")
    stdout = ByteArrayOutputStream()
 
@@ -434,18 +426,14 @@ tasks.register("takeConfig") {
    }
    redis = stdout.toString().trim().replace("\"", "")
    stdout = ByteArrayOutputStream()
+
    exec {
        commandLine = listOf("terraform", "output", "playground_gke_project")
        standardOutput = stdout
    }
    proj = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
-   exec {
-       commandLine = listOf("terraform", "output", "docker-repository-root")
-       standardOutput = stdout
-   }
-   registry = stdout.toString().trim().replace("\"", "")
-   stdout = ByteArrayOutputStream()
+   stdout = ByteArrayOutputStream() 
+
    exec {
        commandLine = listOf("terraform", "output", "playground_static_ip_address_name")
        standardOutput = stdout
@@ -483,7 +471,6 @@ registry: ${registry}
 static_ip_name: ${ipaddrname}
 tag: $d_tag
 dns_name: ${dns_name}
-datastore_name: ${datastore_name}
     """)
  }
 }
@@ -522,4 +509,3 @@ tasks.register("gkebackend") {
   indexcreateTask.mustRunAfter(pushFrontTask)
   helmTask.mustRunAfter(indexcreateTask)
 }
-

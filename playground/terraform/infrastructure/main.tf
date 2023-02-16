@@ -33,13 +33,13 @@ module "network" {
   subnetwork_name = var.subnetwork_name
 }
 
-module "artifact_registry" {
-  depends_on = [module.setup, module.api_enable, module.ip_address]
-  source     = "./artifact_registry"
-  project_id = var.project_id
-  id         = var.repository_id
-  location   = var.repository_location
-}
+# module "artifact_registry" {
+#   depends_on = [module.setup, module.api_enable, module.ip_address]
+#   source     = "./artifact_registry"
+#   project_id = var.project_id
+#   id         = var.repository_id
+#   location   = var.repository_location
+# }
 
 module "memorystore" {
   depends_on     = [module.setup, module.network, module.api_enable, module.ip_address]
@@ -49,7 +49,7 @@ module "memorystore" {
   region         = var.redis_region
   name           = var.redis_name
   tier           = var.redis_tier
-  replica_count  = var.redis_replica_count
+#  replica_count  = var.redis_replica_count
   memory_size_gb = var.redis_memory_size_gb
   replicas_mode  = var.read_replicas_mode
   network        = module.network.playground_network_id
@@ -57,7 +57,7 @@ module "memorystore" {
 }
 
 module "gke" {
-  depends_on            = [module.setup, module.artifact_registry, module.memorystore, module.network, module.api_enable, module.ip_address]
+  depends_on            = [module.setup, module.memorystore, module.network, module.api_enable, module.ip_address]
   source                = "./gke"
   project_id            = var.project_id
   service_account_email = module.setup.service_account_email
@@ -75,12 +75,12 @@ module "ip_address" {
   depends_on      = [module.setup, module.api_enable]
 }
 
-module "appengine" {
- depends_on         = [module.setup, module.api_enable, module.ip_address]
- source             = "./appengine"
- project_id         = var.project_id
- region             = var.region
-}
+# module "appengine" {
+#  depends_on         = [module.setup, module.api_enable, module.ip_address]
+#  source             = "./appengine"
+#  project_id         = var.project_id
+#  region             = var.region
+# }
 
 module "api_enable" {
   source            = "./api_enable"

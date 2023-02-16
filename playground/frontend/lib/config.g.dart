@@ -28,12 +28,12 @@
 // Generated content below
 const String kAnalyticsUA = 'UA-73650088-2';
 const String kApiClientURL =
-    'https://backend-router-beta-dot-apache-beam-testing.appspot.com';
+      'https://router.stg3.pgtestsandbox.com';
 const String kApiJavaClientURL =
-    'https://backend-java-beta-dot-apache-beam-testing.appspot.com';
+      'https://java.stg3.pgtestsandbox.com';
 const String kApiGoClientURL =
-    'https://backend-go-beta-dot-apache-beam-testing.appspot.com';
+      'https://go.stg3.pgtestsandbox.com';
 const String kApiPythonClientURL =
-    'https://backend-python-beta-dot-apache-beam-testing.appspot.com';
+      'https://python.stg3.pgtestsandbox.com';
 const String kApiScioClientURL =
-    'https://backend-scio-beta-dot-apache-beam-testing.appspot.com';
+      'https://scio.stg3.pgtestsandbox.com';

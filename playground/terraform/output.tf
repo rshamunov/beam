@@ -17,17 +17,17 @@
 # under the License.
 #
 
-output "playground_registry_id" {
-  value = module.infrastructure.playground_registry_id
-}
+#output "playground_registry_id" {
+#  value = module.infrastructure.playground_registry_id
+#}
 
-output "playground_registry_location" {
-  value = module.infrastructure.playground_registry_location
-}
+#output "playground_registry_location" {
+#  value = module.infrastructure.playground_registry_location
+#}
 
-output "playground_registry_name" {
-  value = module.infrastructure.playground_registry_name
-}
+#output "playground_registry_name" {
+#  value = module.infrastructure.playground_registry_name
+#}
 
 output "playground_network_id" {
   value = module.infrastructure.playground_network_id
@@ -49,9 +49,9 @@ output "playground_redis_ip" {
   value = module.infrastructure.playground_redis_ip
 }
 
-output "docker-repository-root" {
-  value = module.infrastructure.docker-repository-root
-}
+#output "docker-repository-root" {
+#  value = module.infrastructure.docker-repository-root
+#}
 
 output "playground_static_ip_address" {
   value = module.infrastructure.playground_static_ip_address

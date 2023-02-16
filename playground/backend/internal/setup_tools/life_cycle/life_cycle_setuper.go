@@ -229,7 +229,7 @@ func prepareSbtFiles(lc *fs_tool.LifeCycle, pipelineFolder string, workingDir st
 		AbsoluteLogFilePath:              absLogFilePath,
 		AbsoluteGraphFilePath:            absGraphFilePath,
 		ProjectDir:                       projectFolder,
-		ExecutableName:                   executableName,
+		FindExecutableName:               executableName,
 	}
 
 	return lc, nil

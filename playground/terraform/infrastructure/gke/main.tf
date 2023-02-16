@@ -35,7 +35,7 @@ resource "google_container_node_pool" "playground-node-pool" {
     min_node_count = var.min_count
     max_node_count = var.max_count
    }
-  node_count = 2 
+  node_count = 1 
   management {
     auto_repair  = "true"
     auto_upgrade = "true"

@@ -18,5 +18,5 @@
 #
 
 resource "google_compute_global_address" "pg-ip" {
- name        = "pg-static-ip"
+ name        = "stg3-pg-static-ip"
 }

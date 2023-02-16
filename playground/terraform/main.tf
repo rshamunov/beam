@@ -32,7 +32,7 @@ module "infrastructure" {
   redis_version                 = var.redis_version
   redis_name                    = var.redis_name
   redis_tier                    = var.redis_tier
-  redis_replica_count           = var.redis_replica_count
+#  redis_replica_count           = var.redis_replica_count
   redis_memory_size_gb          = var.redis_memory_size_gb
   #NETWORK
   network_name                  = var.network_name
