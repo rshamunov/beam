@@ -14,7 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export http_proxy=http://$PLAYGROUND_MITM_SERVICE_HOST:$PLAYGROUND_MITM_SERVICE_PORT
-export https_proxy=http://$PLAYGROUND_MITM_SERVICE_HOST:$PLAYGROUND_MITM_SERVICE_PORT
-export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dhttp.proxyHost=$PLAYGROUND_MITM_SERVICE_HOST -Dhttp.proxyPort:$PLAYGROUND_MITM_SERVICE_PORT -Dhttps.proxyHost=$PLAYGROUND_MITM_SERVICE_HOST -Dhttps.proxyPort=$PLAYGROUND_MITM_SERVICE_PORT"
-/opt/playground/backend/server_java_backend
+set -o errexit
+set -o pipefail
+
+MITMPROXY_PATH="/home/mitmproxy/.mitmproxy"
+
+if [ -f "$MITMPROXY_PATH/mitmproxy-ca.pem" ]; then
+  f="$MITMPROXY_PATH/mitmproxy-ca.pem"
+else
+  f="$MITMPROXY_PATH"
+fi
+usermod -o \
+    -u $(stat -c "%u" "$f") \
+    -g $(stat -c "%g" "$f") \
+    mitmproxy
+
+gosu mitmproxy mitmdump
