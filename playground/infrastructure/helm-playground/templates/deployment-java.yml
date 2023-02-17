@@ -39,7 +39,7 @@ spec:
          - name: CACHE_ADDRESS
            value: {{ .Values.redis_ip }}
          - name: NUM_PARALLEL_JOBS
-           value: "15"
+           value: "5"
          - name: DATASTORE_NAMESPACE
            value: {{ .Values.datastore_name }}
        livenessProbe:
@@ -56,7 +56,7 @@ spec:
          periodSeconds: {{ .Values.healthcheck.readPeriodSeconds }}
        resources:
          requests:
-           memory: "4000Mi"
+           memory: "2000Mi"
            cpu: "1000m"
          limits:
            cpu: "8000m"

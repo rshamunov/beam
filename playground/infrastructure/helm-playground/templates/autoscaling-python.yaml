@@ -17,8 +17,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: playground-python
 spec:
-  maxReplicas: 10
-  minReplicas: 1
+  maxReplicas: 6
+  minReplicas: 2
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
