@@ -16,8 +16,6 @@
 # ALLOWED_LIST contains all hosts that are allowed to make requests
 # from Beam Playground
 ALLOWED_LIST = [
-    "localhost",
-    "127.0.0.1",
     "logging.googleapis.com",
     "datastore.googleapis.com",
     "oauth2.googleapis.com",
@@ -27,6 +25,7 @@ ALLOWED_LIST = [
     "github.com",
     "packages.confluent.io",
     "bigquery.googleapis.com",
+# Allow access to GKE metadata server for service account authentication
     "metadata.google.internal",
     "169.254.169.254",
 ]
