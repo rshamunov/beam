@@ -16,19 +16,23 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
+import 'package:flutter/material.dart';
 
-import '../example_descriptor.dart';
-import 'common.dart';
+import 'graph_builder/canvas_drawer.dart';
+import 'graph_builder/painters/graph_painter.dart';
 
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
+class GraphCustomPainter extends CustomPainter {
+  final GraphPainter graph;
 
-  outputContains: ['Finalizing 5 file results'],
-);
+  GraphCustomPainter({required this.graph});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    graph.paint(CanvasDrawer(canvas));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}

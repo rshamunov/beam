@@ -16,19 +16,15 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
+import 'package:flutter/material.dart';
 
-import '../example_descriptor.dart';
-import 'common.dart';
+import '../enums/result_filter.dart';
 
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
+class ResultFilterController extends ChangeNotifier {
+  ResultFilterEnum value = ResultFilterEnum.all;
 
-  outputContains: ['Finalizing 5 file results'],
-);
+  void setValue(ResultFilterEnum newValue) {
+    value = newValue;
+    notifyListeners();
+  }
+}

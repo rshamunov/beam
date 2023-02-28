@@ -16,19 +16,27 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:playground_components_dev/playground_components_dev.dart';
 
-import '../example_descriptor.dart';
-import 'common.dart';
+import 'common/common.dart';
+import 'miscellaneous_ui/toggle_brightness_mode_test.dart';
 
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
+final _url = '/embedded?path=${javaMinimalWordCount.dbPath}&sdk=java';
 
-  outputContains: ['Finalizing 5 file results'],
-);
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('Embedded run', (WidgetTester wt) async {
+    await init(wt);
+
+    await _openJavaMinimalWordCount(wt);
+    await wt.runExpectCached(javaMinimalWordCount);
+    await wt.modifyRunExpectReal(javaMinimalWordCount);
+    await checkToggleBrightnessMode(wt);
+  });
+}
+
+Future<void> _openJavaMinimalWordCount(WidgetTester wt) async {
+  await wt.navigateAndSettle(_url);
+}

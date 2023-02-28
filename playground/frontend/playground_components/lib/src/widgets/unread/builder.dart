@@ -16,19 +16,31 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
+import 'package:flutter/widgets.dart';
 
-import '../example_descriptor.dart';
-import 'common.dart';
+import '../../controllers/unread_controller.dart';
 
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
+/// Calls [builder] when [controller] changes and passes the unread status
+/// of [unreadKey].
+class UnreadBuilder extends StatelessWidget {
+  const UnreadBuilder({
+    super.key,
+    required this.builder,
+    required this.controller,
+    required this.unreadKey,
+  });
 
-  outputContains: ['Finalizing 5 file results'],
-);
+  final Widget Function(BuildContext context, bool isUnread) builder;
+  final UnreadController controller;
+  final Object unreadKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        return builder(context, controller.isUnread(unreadKey));
+      },
+    );
+  }
+}

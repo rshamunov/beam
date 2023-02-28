@@ -16,19 +16,8 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
-
-import '../example_descriptor.dart';
-import 'common.dart';
-
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
-
-  outputContains: ['Finalizing 5 file results'],
-);
+/// Keys to track the unread status for.
+enum UnreadEntryEnum {
+  result,
+  graph,
+}

@@ -16,19 +16,22 @@
  * limitations under the License.
  */
 
-import 'package:playground_components/playground_components.dart';
+import 'package:flutter/material.dart';
 
-import '../example_descriptor.dart';
-import 'common.dart';
+import '../../constants/sizes.dart';
 
-const scioMinimalWordCount = ExampleDescriptor(
-  //
-  'MinimalWordCount',
-  dbPath: 'SDK_SCIO_MinimalWordCount',
-  path:
-      '/scio-examples/src/main/scala/com/spotify/scio/examples/MinimalWordCount.scala',
-  repositoryAndRef: 'spotify/scio/$spotifyScioRef',
-  sdk: Sdk.scio,
+class UnreadMarkerWidget extends StatelessWidget {
+  const UnreadMarkerWidget();
 
-  outputContains: ['Finalizing 5 file results'],
-);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: BeamIconSizes.xs,
+      height: BeamIconSizes.xs,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+}
