@@ -32,11 +32,11 @@ healthcheck:
    livPeriodSeconds: 30
    readInitialDelaySeconds: 30
    readPeriodSeconds: 30    
-static_ip: 34.160.92.202 
+static_ip: 34.102.224.106 
 redis_ip: 10.56.229.195:6379
 project_id: apache-beam-testing
 registry: us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3
-static_ip_name: stg3-pg-static-ip
+static_ip_name: stg-pg-static-ip
 tag: stg3.2
-dns_name: stg3.pgtestsandbox.com
+dns_name: play-dev.beam.apache.org
 datastore_name: PG-stg3
