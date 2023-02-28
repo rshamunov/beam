@@ -12,7 +12,7 @@ import 'package:playground_components/src/controllers/code_runner.dart' as _i5;
 import 'package:playground_components/src/controllers/example_loaders/examples_loader.dart'
     as _i3;
 import 'package:playground_components/src/controllers/playground_controller.dart'
-    as _i12;
+    as _i13;
 import 'package:playground_components/src/controllers/result_filter_controller.dart'
     as _i4;
 import 'package:playground_components/src/controllers/snippet_editing_controller.dart'
