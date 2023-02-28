@@ -42,13 +42,13 @@ export 'src/models/example_loading_descriptors/empty_example_loading_descriptor.
 export 'src/models/example_loading_descriptors/example_loading_descriptor.dart';
 export 'src/models/example_loading_descriptors/examples_loading_descriptor.dart';
 export 'src/models/example_loading_descriptors/http_example_loading_descriptor.dart';
-export 'src/models/example_loading_descriptors/sdk_aware_example_loading_descriptor.dart';
 export 'src/models/example_loading_descriptors/standard_example_loading_descriptor.dart';
 export 'src/models/example_loading_descriptors/user_shared_example_loading_descriptor.dart';
 export 'src/models/example_view_options.dart';
 export 'src/models/intents.dart';
 export 'src/models/loading_status.dart';
 export 'src/models/outputs.dart';
+export 'src/models/run_shortcut.dart';
 export 'src/models/sdk.dart';
 export 'src/models/shortcut.dart';
 export 'src/models/snippet_file.dart';
@@ -66,16 +66,16 @@ export 'src/router/router_delegate.dart';
 
 export 'src/services/analytics/analytics_service.dart';
 export 'src/services/analytics/events/abstract.dart';
-export 'src/services/analytics/events/cancel_run.dart';
+export 'src/services/analytics/events/app_rated.dart';
 export 'src/services/analytics/events/constants.dart';
 export 'src/services/analytics/events/external_url_navigated.dart';
-export 'src/services/analytics/events/feedback_form.dart';
-export 'src/services/analytics/events/rated.dart';
-export 'src/services/analytics/events/report_issue.dart';
-export 'src/services/analytics/events/reset_snippet.dart';
-export 'src/services/analytics/events/run.dart';
+export 'src/services/analytics/events/feedback_form_sent.dart';
+export 'src/services/analytics/events/report_issue_clicked.dart';
+export 'src/services/analytics/events/run_cancelled.dart';
 export 'src/services/analytics/events/run_finished.dart';
+export 'src/services/analytics/events/run_started.dart';
 export 'src/services/analytics/events/sdk_selected.dart';
+export 'src/services/analytics/events/snippet_reset.dart';
 export 'src/services/analytics/google_analytics4_service/google_analytics4_service.dart';
 export 'src/services/symbols/loaders/yaml.dart';
 

@@ -16,22 +16,29 @@
  * limitations under the License.
  */
 
+import '../../../enums/feedback_rating.dart';
 import 'abstract.dart';
 import 'constants.dart';
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
+/// Feedback with the [rating] and the [text] is sent.
+///
+/// Currently this analytics event is the only medium to log the feedback.
+class FeedbackFormSentAnalyticsEvent extends AnalyticsEventWithSnippetContext {
+  const FeedbackFormSentAnalyticsEvent({
+    required this.rating,
+    required this.text,
+    required super.snippetContext,
   }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
+          name: BeamAnalyticsEvents.feedbackFormSent,
         );
 
-  final Uri url;
+  final FeedbackRating rating;
+  final String text;
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
+        EventParams.feedbackRating: rating.name,
+        EventParams.feedbackText: text,
       };
 }

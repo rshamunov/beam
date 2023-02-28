@@ -19,19 +19,24 @@
 import 'abstract.dart';
 import 'constants.dart';
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
+/// A real or cached run is cancelled.
+class RunCancelledAnalyticsEvent extends AnalyticsEventWithSnippetContext {
+  const RunCancelledAnalyticsEvent({
+    required this.duration,
+    required super.snippetContext,
+    required this.trigger,
+    super.additionalParams,
   }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
+          name: BeamAnalyticsEvents.runCancelled,
         );
 
-  final Uri url;
+  final Duration duration;
+  final EventTrigger trigger;
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
+        EventParams.runDurationInSeconds: duration.inSeconds,
+        EventParams.trigger: trigger.name,
       };
 }

@@ -16,22 +16,12 @@
  * limitations under the License.
  */
 
-import 'abstract.dart';
-import 'constants.dart';
+class TobAnalyticsEvents {
+  static const unitCompleted = 'unit_completed';
+  static const unitClosed = 'unit_closed';
+  static const unitOpened = 'unit_opened';
+}
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
-  }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
-        );
-
-  final Uri url;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
-      };
+class TobEventParams {
+  static const timeSpentInSeconds = 'timeSpentInSeconds';
 }

@@ -16,22 +16,28 @@
  * limitations under the License.
  */
 
-import 'abstract.dart';
-import 'constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
+import 'intents.dart';
+import 'shortcut.dart';
+
+class BeamRunShortcut extends BeamShortcut {
+  final VoidCallback onInvoke;
+
+  BeamRunShortcut({
+    required this.onInvoke,
   }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
+          shortcuts: LogicalKeySet(
+            LogicalKeyboardKey.meta,
+            LogicalKeyboardKey.enter,
+          ),
+          actionIntent: const RunIntent(),
+          createAction: (BuildContext context) => CallbackAction(
+            onInvoke: (_) {
+              onInvoke();
+              return;
+            },
+          ),
         );
-
-  final Uri url;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
-      };
 }

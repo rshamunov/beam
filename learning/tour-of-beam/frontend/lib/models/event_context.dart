@@ -16,22 +16,33 @@
  * limitations under the License.
  */
 
-import 'abstract.dart';
-import 'constants.dart';
+import 'package:equatable/equatable.dart';
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
-  }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
-        );
+const _none = 'none';
 
-  final Uri url;
+/// Basic information of the Tour of Beam state to augment analytics events.
+class TobEventContext with EquatableMixin {
+  const TobEventContext({
+    required this.sdkId,
+    required this.unitId,
+  });
+
+  final String? sdkId;
+  final String? unitId;
+
+  static const empty = TobEventContext(
+    sdkId: null,
+    unitId: null,
+  );
 
   @override
+  List<Object?> get props => [
+        sdkId,
+        unitId,
+      ];
+
   Map<String, dynamic> toJson() => {
-        ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
+        'sdkId': sdkId ?? _none,
+        'unitId': unitId ?? _none,
       };
 }

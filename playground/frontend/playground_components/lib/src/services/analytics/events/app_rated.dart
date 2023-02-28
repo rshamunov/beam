@@ -21,12 +21,12 @@ import 'abstract.dart';
 import 'constants.dart';
 
 /// A thump-up or thumb-down button pressed without yet entering feedback text.
-class RatedAnalyticsEvent extends AnalyticsEventWithSnippetContext {
-  const RatedAnalyticsEvent({
+class AppRatedAnalyticsEvent extends AnalyticsEventWithSnippetContext {
+  const AppRatedAnalyticsEvent({
     required this.rating,
     required super.snippetContext,
   }) : super(
-          name: BeamAnalyticsEvents.rated,
+          name: BeamAnalyticsEvents.appRated,
         );
 
   final FeedbackRating rating;
@@ -34,6 +34,6 @@ class RatedAnalyticsEvent extends AnalyticsEventWithSnippetContext {
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        EventParams.rating: rating.name,
+        EventParams.feedbackRating: rating.name,
       };
 }

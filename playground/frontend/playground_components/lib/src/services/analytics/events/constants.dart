@@ -17,26 +17,33 @@
  */
 
 class BeamAnalyticsEvents {
-  static const cancelRun = 'cancel_run';
+  static const appRated = 'app_rated';
   static const externalUrlNavigated = 'external_url_navigated';
-  static const feedbackForm = 'feedback_form';
-  static const rated = 'rated';
-  static const reportIssue = 'report_issue';
-  static const resetSnippet = 'reset_snippet';
-  static const run = 'run';
+  static const feedbackFormSent = 'feedback_form_sent';
+  static const reportIssueClicked = 'report_issue_clicked';
+  static const runCancelled = 'run_cancelled';
   static const runFinished = 'run_finished';
+  static const runStarted = 'run_started';
   static const sdkSelected = 'sdk_selected';
   static const snippetModified = 'snippet_modified';
+  static const snippetReset = 'snippet_reset';
   static const themeSet = 'theme_set';
 }
 
 class EventParams {
+  static const app = 'app';
   static const brightness = 'brightness';
-  static const file = 'file';
-  static const rating = 'rating';
-  static const runSeconds = 'runSeconds';
+  static const destinationUrl = 'destinationUrl';
+  static const feedbackRating = 'feedbackRating';
+  static const feedbackText = 'feedbackText';
+  static const fileName = 'fileName';
+  static const runDurationInSeconds = 'runDurationInSeconds';
   static const sdk = 'sdk';
   static const snippet = 'snippet';
-  static const text = 'text';
-  static const url = 'url';
+  static const trigger = 'trigger';
+}
+
+enum EventTrigger {
+  shortcut,
+  click,
 }

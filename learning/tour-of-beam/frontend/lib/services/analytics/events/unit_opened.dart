@@ -19,19 +19,10 @@
 import 'abstract.dart';
 import 'constants.dart';
 
-/// Clicked any external link that does not have a dedicated event.
-class ExternalUrlNavigatedAnalyticsEvent extends AnalyticsEvent {
-  const ExternalUrlNavigatedAnalyticsEvent({
-    required this.url,
+class UnitOpenedTobAnalyticsEvent extends AnalyticsEventWithTobContext {
+  const UnitOpenedTobAnalyticsEvent({
+    required super.tobContext,
   }) : super(
-          name: BeamAnalyticsEvents.externalUrlNavigated,
+          name: TobAnalyticsEvents.unitOpened,
         );
-
-  final Uri url;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        ...super.toJson(),
-        EventParams.destinationUrl: url.toString(),
-      };
 }

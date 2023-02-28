@@ -213,22 +213,6 @@ class MockPlaygroundController extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i6.BeamShortcut get runShortcut => (super.noSuchMethod(
-        Invocation.getter(#runShortcut),
-        returnValue: _FakeBeamShortcut_4(
-          this,
-          Invocation.getter(#runShortcut),
-        ),
-      ) as _i6.BeamShortcut);
-  @override
-  set runShortcut(_i6.BeamShortcut? _runShortcut) => super.noSuchMethod(
-        Invocation.setter(
-          #runShortcut,
-          _runShortcut,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
   _i6.BeamShortcut get resetShortcut => (super.noSuchMethod(
         Invocation.getter(#resetShortcut),
         returnValue: _FakeBeamShortcut_4(
