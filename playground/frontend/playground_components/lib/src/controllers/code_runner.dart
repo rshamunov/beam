@@ -33,12 +33,12 @@ import 'unread_controller.dart';
 
 class CodeRunner extends ChangeNotifier {
   final CodeRepository? _codeRepository;
-  final ValueGetter<SnippetEditingController> _snippetEditingControllerGetter;
+  final ValueGetter<SnippetEditingController?> _snippetEditingControllerGetter;
   SnippetEditingController? snippetEditingController;
   final unreadController = UnreadController();
 
   CodeRunner({
-    required ValueGetter<SnippetEditingController>
+    required ValueGetter<SnippetEditingController?>
         snippetEditingControllerGetter,
     CodeRepository? codeRepository,
   })  : _codeRepository = codeRepository,
@@ -61,7 +61,7 @@ class CodeRunner extends ChangeNotifier {
   EventSnippetContext? get eventSnippetContext => _eventSnippetContext;
 
   String? get pipelineOptions =>
-      _snippetEditingControllerGetter().pipelineOptions;
+      _snippetEditingControllerGetter()?.pipelineOptions;
 
   RunCodeResult? get result => _result;
   DateTime? get runStartDate => _runStartDate;
@@ -73,14 +73,14 @@ class CodeRunner extends ChangeNotifier {
   String get resultLogOutput => resultLog + resultOutput;
 
   bool get isExampleChanged {
-    return _snippetEditingControllerGetter().isChanged;
+    return _snippetEditingControllerGetter()?.isChanged ?? false;
   }
 
   // Snapshot of additional analytics data at the time when execution started.
   Map<String, dynamic> _analyticsData = const {};
   Map<String, dynamic> get analyticsData => _analyticsData;
 
-  bool get canRun => snippetEditingController != null;
+  bool get canRun => _snippetEditingControllerGetter() != null;
 
   void clearResult() {
     _setResult(null);
@@ -106,6 +106,7 @@ class CodeRunner extends ChangeNotifier {
     _runStopDate = null;
     notifyListeners();
     snippetEditingController = _snippetEditingControllerGetter();
+    _eventSnippetContext = snippetEditingController!.eventSnippetContext;
     final sdk = snippetEditingController!.sdk;
 
     final parsedPipelineOptions =

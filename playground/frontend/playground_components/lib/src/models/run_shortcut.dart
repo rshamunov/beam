@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../playground_components.dart';
 import 'intents.dart';
 import 'shortcut.dart';
 
@@ -29,7 +30,7 @@ class BeamRunShortcut extends BeamShortcut {
     required this.onInvoke,
   }) : super(
           shortcuts: LogicalKeySet(
-            LogicalKeyboardKey.meta,
+            LogicalKeyboardKeyExtension.metaOrControl,
             LogicalKeyboardKey.enter,
           ),
           actionIntent: const RunIntent(),
