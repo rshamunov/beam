@@ -106,7 +106,7 @@ func (b *CompileBuilder) WithArgs(compileArgs []string) *CompileBuilder {
 	return b
 }
 
-// WithFileNames adds file names to executor
+//  WithFileNames adds file names to executor
 func (b *CompileBuilder) WithFileNames(fileNames ...string) *CompileBuilder {
 	b.actions = append(b.actions, func(e *Executor) {
 		e.compileArgs.fileNames = fileNames
@@ -114,7 +114,7 @@ func (b *CompileBuilder) WithFileNames(fileNames ...string) *CompileBuilder {
 	return b
 }
 
-// WithExecutableFileNames adds file name to executor
+//  WithExecutableFileNames adds file name to executor
 func (b *RunBuilder) WithExecutableFileNames(names ...string) *RunBuilder {
 	b.actions = append(b.actions, func(e *Executor) {
 		e.runArgs.fileNames = names
@@ -146,6 +146,14 @@ func (b *RunBuilder) WithArgs(runArgs []string) *RunBuilder {
 	return b
 }
 
+// WithGraphOutput adds the need of graph output to executor
+func (b *RunBuilder) WithGraphOutput() *RunBuilder {
+	b.actions = append(b.actions, func(e *Executor) {
+		//todo
+	})
+	return b
+}
+
 // WithCommand adds test command to executor
 func (b *UnitTestExecutorBuilder) WithCommand(testCmd string) *UnitTestExecutorBuilder {
 	b.actions = append(b.actions, func(e *Executor) {
@@ -166,6 +174,14 @@ func (b *UnitTestExecutorBuilder) WithArgs(testArgs []string) *UnitTestExecutorB
 func (b *UnitTestExecutorBuilder) WithWorkingDir(dir string) *UnitTestExecutorBuilder {
 	b.actions = append(b.actions, func(e *Executor) {
 		e.testArgs.workingDir = dir
+	})
+	return b
+}
+
+// WithGraphOutput adds the need of graph output to executor
+func (b *UnitTestExecutorBuilder) WithGraphOutput() *UnitTestExecutorBuilder {
+	b.actions = append(b.actions, func(e *Executor) {
+		//todo
 	})
 	return b
 }

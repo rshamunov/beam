@@ -20,7 +20,6 @@
 apply plugin: 'org.apache.beam.module'
 apply plugin: 'base'
 apply plugin: 'java'
-apply from: "$project.rootDir/playground/backend/containers/git-functions.gradle"
 applyDockerNature()
 
 def playgroundJobServerProject = "${project.path.replace('-container', '')}"
