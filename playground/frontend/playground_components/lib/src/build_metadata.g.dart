@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-// This file was auto-generated and used to contain backend URLs.
-// They are now determined automatically
-// as of https://github.com/apache/beam/pull/25610
-// TODO(alexeyinkin): When it is merged, find a better place for the remaining
-//  constant and delete this file.
-
-const String kAnalyticsUA = 'G-BXFP2FNCKC';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+//
+// This file is generated during deployment to contain data about the commit.
+// The copy of this file stored in the repository is for development purpose
+// so the project can be started locally.
+// Keep these constants `null` in the repository.
+const buildCommitHash = null;
+const buildCommitSecondsSinceEpoch = null;

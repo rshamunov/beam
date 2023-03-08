@@ -16,10 +16,21 @@
  * limitations under the License.
  */
 
-// This file was auto-generated and used to contain backend URLs.
-// They are now determined automatically
-// as of https://github.com/apache/beam/pull/25610
-// TODO(alexeyinkin): When it is merged, find a better place for the remaining
-//  constant and delete this file.
+import '../api/v1/api.pb.dart';
+import '../models/component_version.dart';
 
-const String kAnalyticsUA = 'G-BXFP2FNCKC';
+extension MetadataResponseGrpcExtension on GetMetadataResponse {
+  ComponentVersion get componentVersion {
+    return ComponentVersion(
+      // If a string is optional in protobuf, for some reason it becomes
+      // a non-nullable Dart string with '' as the default value.
+      // This can be deleted if this lands:
+      //  https://github.com/google/protobuf.dart/issues/523
+      beamSdkVersion: beamSdkVersion == '' ? null : beamSdkVersion,
+      buildCommitHash: buildCommitHash,
+      dateTime: DateTime.fromMillisecondsSinceEpoch(
+        buildCommitTimestampSecondsSinceEpoch.toInt() * 1000,
+      ),
+    );
+  }
+}

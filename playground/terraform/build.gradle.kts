@@ -282,71 +282,15 @@ tasks.register("pushFront") {
     dependsOn(":playground:frontend:dockerTagsPush")
 }
 
-tasks.register("prepareConfig") {
-    group = "deploy"
-    doLast {
-        var dns_name = ""
-        if (project.hasProperty("dns-name")) {
-        dns_name = project.property("dns-name") as String
-          }
-        val configFileName = "config.g.dart"
-        val modulePath = project(":playground:frontend").projectDir.absolutePath
-        var file = File("$modulePath/lib/$configFileName")
-        val lines = file.readLines()
-        val endOfSlice = lines.indexOfFirst { it.contains("Generated content below") }
-        if (endOfSlice != -1) {
-            val oldContent = lines.slice(0 until endOfSlice)
-            val flagDelete = file.delete()
-            if (!flagDelete) {
-                throw kotlin.RuntimeException("Deleting file failed")
-            }
-            val sb = kotlin.text.StringBuilder()
-            val lastLine = oldContent[oldContent.size - 1]
-            oldContent.forEach {
-                if (it == lastLine) {
-                    sb.append(it)
-                } else {
-                    sb.appendLine(it)
-                }
-            }
-            file.writeText(sb.toString())
-        }
-        file.writeText(
-            """
-const String kAnalyticsUA = 'G-BXFP2FNCKC';
-const String kApiClientURL =
-      'https://router.${dns_name}';
-const String kApiJavaClientURL =
-      'https://java.${dns_name}';
-const String kApiGoClientURL =
-      'https://go.${dns_name}';
-const String kApiPythonClientURL =
-      'https://python.${dns_name}';
-const String kApiScioClientURL =
-      'https://scio.${dns_name}';
-"""
-        )
-        try {
-            var stdout = ByteArrayOutputStream()
-            //set Docker Registry
-            project.rootProject.extra["docker-repository-root"] = "us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3"
-    } catch (e: Exception) {
-        } catch (e: Exception) {
-        }
-    }
-}
 /* initialization infrastructure */
 tasks.register("InitInfrastructure") {
     group = "deploy"
     description = "initialization infrastructure"
     val init = tasks.getByName("terraformInit")
     val apply = tasks.getByName("terraformApplyInf")
-    val prepare = tasks.getByName("prepareConfig")
     dependsOn(init)
     dependsOn(apply)
-    dependsOn(prepare)
     apply.mustRunAfter(init)
-    prepare.mustRunAfter(apply)
 }
 
 tasks.register("indexcreate") {

@@ -16,10 +16,8 @@
  * limitations under the License.
  */
 
-// This file was auto-generated and used to contain backend URLs.
-// They are now determined automatically
-// as of https://github.com/apache/beam/pull/25610
-// TODO(alexeyinkin): When it is merged, find a better place for the remaining
-//  constant and delete this file.
-
-const String kAnalyticsUA = 'G-BXFP2FNCKC';
+/// Mimics [Future.wait] for a map.
+Future<Map<K, V>> waitMap<K, V>(Map<K, Future<V>> map) async {
+  final values = await Future.wait(map.values);
+  return Map.fromIterables(map.keys, values);
+}

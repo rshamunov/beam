@@ -16,10 +16,36 @@
  * limitations under the License.
  */
 
-// This file was auto-generated and used to contain backend URLs.
-// They are now determined automatically
-// as of https://github.com/apache/beam/pull/25610
-// TODO(alexeyinkin): When it is merged, find a better place for the remaining
-//  constant and delete this file.
+import 'package:flutter/material.dart';
 
-const String kAnalyticsUA = 'G-BXFP2FNCKC';
+// TODO(alexeyinkin): In future convert all dialogs to this one.
+class BeamDialog extends StatelessWidget {
+  const BeamDialog({
+    required this.child,
+    this.title,
+  });
+
+  final Widget child;
+  final Widget? title;
+
+  static Future<void> show({
+    required Widget child,
+    required BuildContext context,
+    Widget? title,
+  }) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => BeamDialog(
+        child: AlertDialog(
+          title: title,
+          content: child,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+}
