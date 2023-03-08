@@ -50,6 +50,38 @@
 * ([#X](https://github.com/apache/beam/issues/X)).
 -->
 
+# [2.47.0] - Unreleased
+
+## Highlights
+
+* New highly anticipated feature X added to Python SDK ([#X](https://github.com/apache/beam/issues/X)).
+* New highly anticipated feature Y added to Java SDK ([#Y](https://github.com/apache/beam/issues/Y)).
+
+## I/Os
+
+* Support for X source added (Java/Python) ([#X](https://github.com/apache/beam/issues/X)).
+
+## New Features / Improvements
+
+* The Flink runner now supports Flink 1.16.x ([#25046](https://github.com/apache/beam/issues/25046)).
+* X feature added (Java/Python) ([#X](https://github.com/apache/beam/issues/X)).
+
+## Breaking Changes
+
+* X behavior was changed ([#X](https://github.com/apache/beam/issues/X)).
+
+## Deprecations
+
+* X behavior is deprecated and will be removed in X versions ([#X](https://github.com/apache/beam/issues/X)).
+
+## Bugfixes
+
+* Fixed X (Java/Python) ([#X](https://github.com/apache/beam/issues/X)).
+
+## Known Issues
+
+* ([#X](https://github.com/apache/beam/issues/X)).
+
 # [2.46.0] - Unreleased
 
 ## Highlights
@@ -61,12 +93,14 @@
 * RunInference PTransform will accept model paths as SideInputs in Python SDK. ([#24042](https://github.com/apache/beam/issues/24042))
 * RunInference supports ONNX runtime in Python SDK ([#22972](https://github.com/apache/beam/issues/22972))
 * Tensorflow Model Handler for RunInference in Python SDK ([#25366](https://github.com/apache/beam/issues/25366))
+* Java SDK modules migrated to use `:sdks:java:extensions:avro` ([#24748](https://github.com/apache/beam/issues/24748))
 
 ## I/Os
 
 * Support for X source added (Java/Python) ([#X](https://github.com/apache/beam/issues/X)).
 * Added in JmsIO a retry policy for failed publications (Java) ([#24971](https://github.com/apache/beam/issues/24971)).
 * Support for `LZMA` compression/decompression of text files added to the Python SDK ([#25316](https://github.com/apache/beam/issues/25316))
+* Added ReadFrom/WriteTo Csv/Json as top-level transforms to the Python SDK.
 
 ## New Features / Improvements
 
@@ -91,7 +125,9 @@
 
 ## Deprecations
 
-* X behavior is deprecated and will be removed in X versions ([#X](https://github.com/apache/beam/issues/X)).
+* Avro related classes are deprecated in module `beam-sdks-java-core` and will be eventually removed. Please, migrate to a new module `beam-sdks-java-extensions-avro` instead by importing the classes from `org.apache.beam.sdk.extensions.avro` package.
+  For the sake of migration simplicity, the relative package path and the whole class hierarchy of Avro related classes in new module is preserved the same as it was before.
+  For example, import `org.apache.beam.sdk.extensions.avro.coders.AvroCoder` class instead of`org.apache.beam.sdk.coders.AvroCoder`. ([#24749](https://github.com/apache/beam/issues/24749)).
 
 ## Bugfixes
 

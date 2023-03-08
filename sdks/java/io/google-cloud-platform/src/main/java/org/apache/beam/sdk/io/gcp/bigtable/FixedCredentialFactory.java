@@ -15,28 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.beam.sdk.io.gcp.bigtable;
 
-import PrecommitJobBuilder
+import com.google.auth.Credentials;
+import org.apache.beam.sdk.extensions.gcp.auth.CredentialFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-PrecommitJobBuilder builder = new PrecommitJobBuilder(
-    scope: this,
-    nameBase: 'Java_Solr_IO_Direct',
-    gradleTasks: [
-      ':sdks:java:io:solr:build',
-    ],
-    gradleSwitches: [
-      '-PdisableSpotlessCheck=true',
-      '-PdisableCheckStyle=true'
-    ], // spotless checked in separate pre-commit
-    triggerPathPatterns: [
-      '^sdks/java/core/src/main/.*$',
-      '^sdks/java/io/common/.*$',
-      '^sdks/java/io/solr/.*$',
-    ],
-    timeoutMins: 60,
-    )
-builder.build {
-  publishers {
-    archiveJunit('**/build/test-results/**/*.xml')
+/**
+ * A fixed credential factory to return the credential set by users. This class is for backward
+ * compatibility if a user is setting credentials through BigtableOptions.
+ */
+class FixedCredentialFactory implements CredentialFactory {
+
+  private Credentials credentials;
+
+  private FixedCredentialFactory(Credentials credentials) {
+    this.credentials = credentials;
+  }
+
+  static FixedCredentialFactory create(Credentials credentials) {
+    return new FixedCredentialFactory(credentials);
+  }
+
+  @Override
+  public @Nullable Credentials getCredential() {
+    return credentials;
   }
 }
