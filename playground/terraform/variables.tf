@@ -37,7 +37,7 @@ variable "region" {
 
 variable "gke_machine_type" {
   description = "Node pool machine types"
-  default     = "e2-standard-4"
+  default     = "e2-standard-8"
 }
 
 variable "gke_name" {
@@ -104,12 +104,12 @@ variable "redis_name" {
 
 variable "redis_tier" {
   description = "Tier of Redis"
-  default     = "STANDARD_HA"
+  default     = "BASIC"
 }
 
 variable "redis_replica_count" {
   description = "Redis's replica count"
-  default     = 1
+  default     = 0
 }
 
 variable "redis_memory_size_gb" {

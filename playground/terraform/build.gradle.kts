@@ -406,6 +406,7 @@ tasks.register("takeConfig") {
     doLast {
         var d_tag = ""
         var dns_name = ""
+        val datastore_name = if (project.hasProperty("datastore_namespace")) (project.property("datastore_namespace") as String) else ""
         if (project.hasProperty("dns-name")) {
             dns_name = project.property("dns-name") as String
         }
