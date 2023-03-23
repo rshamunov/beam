@@ -13,6 +13,7 @@ import 'package:playground_components/src/controllers/example_loaders/examples_l
     as _i3;
 import 'package:playground_components/src/controllers/playground_controller.dart'
     as _i13;
+import 'package:playground_components/src/controllers/output_filter_type_controller.dart'
 import 'package:playground_components/src/controllers/result_filter_controller.dart'
     as _i4;
 import 'package:playground_components/src/controllers/snippet_editing_controller.dart'
@@ -225,6 +226,23 @@ class MockPlaygroundController extends _i1.Mock
         Invocation.setter(
           #resetShortcut,
           _resetShortcut,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i6.BeamShortcut get showSuggestionsShortcut => (super.noSuchMethod(
+        Invocation.getter(#showSuggestionsShortcut),
+        returnValue: _FakeBeamShortcut_4(
+          this,
+          Invocation.getter(#showSuggestionsShortcut),
+        ),
+      ) as _i6.BeamShortcut);
+  @override
+  set showSuggestionsShortcut(_i6.BeamShortcut? _showSuggestionsShortcut) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #showSuggestionsShortcut,
+          _showSuggestionsShortcut,
         ),
         returnValueForMissingStub: null,
       );

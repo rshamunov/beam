@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import '../../constants/sizes.dart';
 import '../../controllers/playground_controller.dart';
 import '../../enums/unread_entry.dart';
+import '../scroll_2d.dart';
 import '../unread/clearer.dart';
 import 'graph/graph_builder/graph_builder.dart';
 import 'graph/graph_builder/painters/graph_painter.dart';
