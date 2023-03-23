@@ -1391,6 +1391,7 @@ type PrecompiledObject struct {
 	// Link to the example in the Beam repository
 	UrlVcs      string `protobuf:"bytes,14,opt,name=url_vcs,json=urlVcs,proto3" json:"url_vcs,omitempty"`
 	UrlNotebook string `protobuf:"bytes,15,opt,name=url_notebook,json=urlNotebook,proto3" json:"url_notebook,omitempty"`
+	AlwaysRun   bool   `protobuf:"varint,16,opt,name=always_run,json=alwaysRun,proto3" json:"always_run,omitempty"`
 }
 
 func (x *PrecompiledObject) Reset() {
@@ -1528,6 +1529,13 @@ func (x *PrecompiledObject) GetUrlNotebook() string {
 		return x.UrlNotebook
 	}
 	return ""
+}
+
+func (x *PrecompiledObject) GetAlwaysRun() bool {
+	if x != nil {
+		return x.AlwaysRun
+	}
+	return false
 }
 
 // Categories represent the array of messages with sdk and categories at this sdk
