@@ -460,12 +460,11 @@ dns_name: ${dns_name}
 tasks.register("helmRelease") {
     group = "deploy"
     val modulePath = project(":playground").projectDir.absolutePath
-    val hdir = File("$modulePath/infrastructure/helm-playground/")
-    doLast {
-        exec {
-            executable("helm")
-            args("install", "playground", "$hdir")
-        }
+    val helmdir = File("$modulePath/infrastructure/helm-playground/")
+    doLast{
+    exec {
+        executable("helm")
+    args("upgrade", "--install", "playground", "$helmdir")
     }
 }
 tasks.register("gkebackend") {
@@ -488,4 +487,3 @@ tasks.register("gkebackend") {
     indexcreateTask.mustRunAfter(pushFrontTask)
     helmTask.mustRunAfter(indexcreateTask)
 }
-
