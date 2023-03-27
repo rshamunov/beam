@@ -269,47 +269,15 @@ tasks.register("pushFront") {
     dependsOn(":playground:frontend:dockerTagsPush")
 }
 
-tasks.register("prepareConfig") {
-    group = "deploy"
-
-    doLast {
-        var dns_name = ""
-        if (project.hasProperty("dns-name")) {
-            dns_name = project.property("dns-name") as String
-        }
-        val configFileName = "config.g.dart"
-        val modulePath = project(":playground:frontend").projectDir.absolutePath
-        var file = File("$modulePath/lib/$configFileName")
-
-        file.writeText(
-            """
-const String kAnalyticsUA = 'UA-73650088-2';
-const String kApiClientURL =
-      'https://router.${dns_name}';
-const String kApiJavaClientURL =
-      'https://java.${dns_name}';
-const String kApiGoClientURL =
-      'https://go.${dns_name}';
-const String kApiPythonClientURL =
-      'https://python.${dns_name}';
-const String kApiScioClientURL =
-      'https://scio.${dns_name}';
-"""
-        )
-    }
-}
 /* initialization infrastructure */
 tasks.register("InitInfrastructure") {
     group = "deploy"
     description = "initialization infrastructure"
     val init = tasks.getByName("terraformInit")
     val apply = tasks.getByName("terraformApplyInf")
-    val prepare = tasks.getByName("prepareConfig")
     dependsOn(init)
     dependsOn(apply)
-    dependsOn(prepare)
     apply.mustRunAfter(init)
-    prepare.mustRunAfter(apply)
 }
 
 tasks.register("indexcreate") {
