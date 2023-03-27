@@ -269,6 +269,7 @@ tasks.register("pushFront") {
     dependsOn(":playground:frontend:dockerTagsPush")
 }
 
+
 /* initialization infrastructure */
 tasks.register("InitInfrastructure") {
     group = "deploy"
