@@ -25,8 +25,16 @@ resource "google_container_cluster" "playground-gke" {
   network                    = var.network
   subnetwork                 = var.subnetwork
   remove_default_node_pool = true
+  network_policy {
+      enabled  = true
+      provider = "CALICO"
+  }
+  addons_config {
+   network_policy_config {
+    disabled = false
+  }
+ }
 }
-
 resource "google_container_node_pool" "playground-node-pool" {
   name       = "playground-node-pool"
   cluster    = google_container_cluster.playground-gke.name

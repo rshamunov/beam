@@ -12,31 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-replicaCount: 1
-image:
-   java_image: beam_playground-backend-java
-   go_image: beam_playground-backend-go
-   router_image: beam_playground-backend-router
-   scio_image: beam_playground-backend-scio
-   python_image: beam_playground-backend-python
-   frontend_image: beam_playground-frontend
-   mitm_image: beam_playground-backend-mitmproxy
-   pullPolicy: Always
-service:
-   type: NodePort
-   targetPort: 8080
-   port: 443
-healthcheck:
-   port: 8080
-   livInitialDelaySeconds: 30
-   livPeriodSeconds: 30
-   readInitialDelaySeconds: 30
-   readPeriodSeconds: 30
-autoscaling:
-   runners:
-     maxReplicas: 4
-     minReplicas: 2
-   rest:
-     maxReplicas: 4
-     minReplicas: 1
-     
+
+listen_port: 8080
+ignore_hosts:
+  - ".*"
+scripts:
+  - /home/mitmproxy/allow_list_proxy.py

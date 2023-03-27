@@ -16,18 +16,15 @@
 # ALLOWED_LIST contains all hosts that are allowed to make requests
 # from Beam Playground
 ALLOWED_LIST = [
-    "localhost",
-    "127.0.0.1",
     "logging.googleapis.com",
-    "datastore.googleapis.com",
     "oauth2.googleapis.com",
     "storage.googleapis.com",
-    "repo1.maven.org"
-]
-
-# ALLOWED_BUCKET_LIST contains all public Google Cloud Storage buckets
-# that are allowed to make requests from Beam Playground
-ALLOWED_BUCKET_LIST = [
-    "dataflow-samples",
-    "beam-samples"
+    "www.googleapis.com",
+    "repo1.maven.org",
+    "github.com",
+    "packages.confluent.io",
+    "bigquery.googleapis.com",
+# Allow access to GKE metadata server for service account authentication
+    "metadata.google.internal",
+    "169.254.169.254",
 ]

@@ -14,13 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-nohup /opt/mitmproxy/mitmdump -s /opt/mitmproxy/allow_list_proxy.py -p 8081 &
-while [ ! -f /home/appuser/.mitmproxy/mitmproxy-ca.pem ] ;
-do
-      sleep 2
-done
-openssl x509 -in /home/appuser/.mitmproxy/mitmproxy-ca.pem -inform PEM -out /home/appuser/.mitmproxy/mitmproxy-ca.crt
-cp /home/appuser/.mitmproxy/mitmproxy-ca.crt /usr/local/share/ca-certificates/extra/
-update-ca-certificates
-
+if [[ -n "$PLAYGROUND_MITM_SERVICE_HOST" ]] && [[ -n "$PLAYGROUND_MITM_SERVICE_PORT" ]]
+then
+    export http_proxy=http://$PLAYGROUND_MITM_SERVICE_HOST:$PLAYGROUND_MITM_SERVICE_PORT
+    export https_proxy=http://$PLAYGROUND_MITM_SERVICE_HOST:$PLAYGROUND_MITM_SERVICE_PORT
+fi
 /opt/playground/backend/server_go_backend
