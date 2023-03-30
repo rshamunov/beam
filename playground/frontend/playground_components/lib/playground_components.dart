@@ -83,6 +83,8 @@ export 'src/services/symbols/loaders/yaml.dart';
 
 export 'src/theme/switch_notifier.dart';
 export 'src/theme/theme.dart';
+export 'src/util/async.dart';
+export 'src/util/iterable.dart';
 export 'src/util/logical_keyboard_key.dart';
 
 export 'src/util/async.dart';
@@ -91,6 +93,7 @@ export 'src/util/string.dart';
 
 export 'src/widgets/bubble.dart';
 export 'src/widgets/clickable.dart';
+export 'src/widgets/close_button.dart';
 export 'src/widgets/complexity.dart';
 export 'src/widgets/dialog.dart';
 export 'src/widgets/divider.dart';

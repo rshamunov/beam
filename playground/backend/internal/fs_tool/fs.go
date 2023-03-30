@@ -18,12 +18,11 @@ package fs_tool
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
 	"io/fs"
 	"os"
 
 	"beam.apache.org/playground/backend/internal/logger"
-	"github.com/google/uuid"
-
 	pb "beam.apache.org/playground/backend/internal/api/v1"
 	"beam.apache.org/playground/backend/internal/db/entity"
 	"beam.apache.org/playground/backend/internal/emulators"

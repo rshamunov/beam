@@ -16,33 +16,11 @@
  * limitations under the License.
  */
 
-import 'package:equatable/equatable.dart';
-
-const _none = 'none';
-
-/// Basic information of the Tour of Beam state to augment analytics events.
-class TobEventContext with EquatableMixin {
-  const TobEventContext({
-    required this.sdkId,
-    required this.unitId,
-  });
-
-  final String? sdkId;
-  final String? unitId;
-
-  static const empty = TobEventContext(
-    sdkId: null,
-    unitId: null,
-  );
-
-  @override
-  List<Object?> get props => [
-        sdkId,
-        unitId,
-      ];
-
-  Map<String, dynamic> toJson() => {
-        'sdkId': sdkId ?? _none,
-        'unitId': unitId ?? _none,
-      };
+extension IterableExtension on Iterable {
+  Iterable<T> alternateWith<T>(T separator) {
+    return expand<T>((item) sync* {
+      yield separator;
+      yield item as T;
+    }).skip(1);
+  }
 }

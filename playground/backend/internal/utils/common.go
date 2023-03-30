@@ -24,23 +24,12 @@ import (
 	"regexp"
 
 	"beam.apache.org/playground/backend/internal/logger"
-	"github.com/google/uuid"
 	"gopkg.in/yaml.v3"
 )
 
 func ReduceWhiteSpacesToSinge(s string) string {
 	re := regexp.MustCompile(`\s+`)
 	return re.ReplaceAllString(s, " ")
-}
-
-// ReadFile reads from file and returns string.
-func ReadFile(pipelineId uuid.UUID, path string) (string, error) {
-	content, err := ioutil.ReadFile(path)
-	if err != nil {
-		logger.Errorf("%s: ReadFile(): error during reading from a file: %s", pipelineId, err.Error())
-		return "", err
-	}
-	return string(content), nil
 }
 
 // ReadYamlFile reads from a yaml file.

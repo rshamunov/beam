@@ -118,9 +118,9 @@ func (pom *PrecompiledObjectMapper) ToDefaultPrecompiledObjects(defaultExamplesD
 	return result
 }
 
-func (pom *PrecompiledObjectMapper) ToPrecompiledObj(exampleDTO *dto.ExampleDTO) *pb.PrecompiledObject {
+func (pom *PrecompiledObjectMapper) ToPrecompiledObj(exampleId string, exampleDTO *dto.ExampleDTO) *pb.PrecompiledObject {
 	return &pb.PrecompiledObject{
-		CloudPath:       getCloudPath(exampleDTO.Example),
+		CloudPath:       exampleId,
 		Name:            exampleDTO.Example.Name,
 		Description:     exampleDTO.Example.Descr,
 		Type:            exampleDTO.GetType(),
@@ -202,7 +202,7 @@ func appendPrecompiledObject(objectInfo dto.ObjectInfo, sdkToCategories *dto.Sdk
 	categoryToPrecompiledObjects[categoryName] = append(objects, objectInfo)
 }
 
-// precompiledObjectsToCategory adds categories with precompiled objects to protobuf object
+// precompiledObjectsToCategory create category protobuf object from precompiled objects
 func precompiledObjectsToCategory(categoryName string, precompiledObjects dto.PrecompiledObjects) *pb.Categories_Category {
 	category := pb.Categories_Category{
 		CategoryName:       categoryName,

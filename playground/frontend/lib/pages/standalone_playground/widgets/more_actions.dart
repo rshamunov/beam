@@ -24,7 +24,8 @@ import 'package:playground_components/playground_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/links.dart';
-import '../../../modules/shortcuts/components/shortcuts_modal.dart';
+import '../../../modules/analytics/analytics_service.dart';
+import '../../../modules/shortcuts/components/shortcuts_dialog.dart';
 import '../../../services/analytics/events/shortcuts_clicked.dart';
 import '../../../src/assets/assets.gen.dart';
 
@@ -79,17 +80,31 @@ class _MoreActionsState extends State<MoreActions> {
 
           PopupMenuItem<HeaderAction>(
             padding: EdgeInsets.zero,
+            value: HeaderAction.versions,
+            child: ListTile(
+              leading: const Icon(Icons.watch_later_outlined),
+              title: const Text('widgets.versions.title').tr(),
+              onTap: () => BeamDialog.show(
+                context: context,
+                title: const Text('widgets.versions.title').tr(),
+                child: const VersionsWidget(sdks: Sdk.known),
+              ),
+            ),
+          ),
+
+          PopupMenuItem<HeaderAction>(
+            padding: EdgeInsets.zero,
             value: HeaderAction.shortcuts,
             child: ListTile(
               leading: SvgPicture.asset(Assets.shortcuts),
               title: Text(appLocale.shortcuts),
               onTap: () {
-                PlaygroundComponents.analyticsService.sendUnawaited(
-                  const ShortcutsClickedAnalyticsEvent(),
-                );
-                showDialog<void>(
+                AnalyticsService.get(context).trackOpenShortcutsModal();
+                BeamDialog.show(
+                  actions: [BeamCloseButton()],
                   context: context,
-                  builder: (BuildContext context) => ShortcutsModal(
+                  title: Text(appLocale.shortcuts),
+                  child: ShortcutsDialogContent(
                     playgroundController: widget.playgroundController,
                   ),
                 );
