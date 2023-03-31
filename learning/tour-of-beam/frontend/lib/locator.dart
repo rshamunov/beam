@@ -34,10 +34,31 @@ import 'router/route_information_parser.dart';
 import 'state.dart';
 
 Future<void> initializeServiceLocator() async {
+  await _initializeRepositories();
   _initializeAuth();
   _initializeState();
   _initializeServices();
   _initializeCaches();
+}
+
+Future<void> _initializeRepositories() async {
+  final routerUrl = await getRouterUrl();
+
+  final codeClient = GrpcCodeClient(
+    url: routerUrl,
+    // TODO(nausharipov): Remove the hardcoded SDKs when runners are hidden.
+    runnerUrlsById: {
+      Sdk.java.id: await getRunnerUrl(Sdk.java),
+      Sdk.go.id: await getRunnerUrl(Sdk.go),
+      Sdk.python.id: await getRunnerUrl(Sdk.python),
+    },
+  );
+  final exampleClient = GrpcExampleClient(url: routerUrl);
+
+  GetIt.instance.registerSingleton<CodeClient>(codeClient);
+  GetIt.instance.registerSingleton(CodeRepository(client: codeClient));
+  GetIt.instance.registerSingleton<ExampleClient>(exampleClient);
+  GetIt.instance.registerSingleton(ExampleRepository(client: exampleClient));
 }
 
 void _initializeAuth() {

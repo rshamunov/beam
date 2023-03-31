@@ -23,6 +23,7 @@ import 'package:playground_components/playground_components.dart';
 import 'pages/loading/page.dart';
 import 'router/page_factory.dart';
 import 'router/route_information_parser.dart';
+import 'config.g.dart';
 
 Future<void> initializeServiceLocator() async {
   await _initializeRepositories();
