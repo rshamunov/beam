@@ -16,37 +16,6 @@
  * limitations under the License.
  */
 
-<<<<<<<< HEAD:learning/tour-of-beam/frontend/lib/models/event_context.dart
-import 'package:equatable/equatable.dart';
-
-const _none = 'none';
-
-/// Basic information of the Tour of Beam state to augment analytics events.
-class TobEventContext with EquatableMixin {
-  const TobEventContext({
-    required this.sdkId,
-    required this.unitId,
-  });
-
-  final String? sdkId;
-  final String? unitId;
-
-  static const empty = TobEventContext(
-    sdkId: null,
-    unitId: null,
-  );
-
-  @override
-  List<Object?> get props => [
-        sdkId,
-        unitId,
-      ];
-
-  Map<String, dynamic> toJson() => {
-        'sdkId': sdkId ?? _none,
-        'unitId': unitId ?? _none,
-      };
-========
 import '../api/v1/api.pb.dart';
 import '../models/component_version.dart';
 
@@ -67,5 +36,4 @@ extension MetadataResponseGrpcExtension on GetMetadataResponse {
 
     return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
   }
->>>>>>>> apache/master:playground/frontend/playground_components/lib/src/repositories/get_metadata_response_grpc_extension.dart
 }
