@@ -16,29 +16,14 @@
  * limitations under the License.
  */
 
-import 'package:equatable/equatable.dart';
+import 'abstract.dart';
+import 'constants.dart';
 
-class AnalyticsEvent with EquatableMixin {
-  final String action;
-  final String category;
-  final String? label;
-  final Map<String, String>? parameters;
-  final int? value;
-
-  AnalyticsEvent({
-    required this.action,
-    required this.category,
-    this.label,
-    this.parameters,
-    this.value,
-  });
-
-  @override
-  List<Object?> get props => [
-        action,
-        category,
-        label,
-        parameters,
-        value,
-      ];
+/// A unit is opened.
+class UnitOpenedTobAnalyticsEvent extends AnalyticsEventWithTobContext {
+  const UnitOpenedTobAnalyticsEvent({
+    required super.tobContext,
+  }) : super(
+          name: TobAnalyticsEvents.unitOpened,
+        );
 }
