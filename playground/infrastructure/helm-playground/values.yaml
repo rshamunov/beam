@@ -37,6 +37,6 @@ redis_ip: 10.56.229.195:6379
 project_id: apache-beam-testing
 registry: us-west1-docker.pkg.dev/apache-beam-testing/playground-repository-stg3
 static_ip_name: stg-pg-static-ip
-tag: stg3.3
+tag: stg3.5
 dns_name: play-dev.beam.apache.org
 datastore_name: PG-stg3
