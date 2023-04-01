@@ -24,9 +24,7 @@ import 'package:playground_components/playground_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/links.dart';
-import '../../../modules/analytics/analytics_service.dart';
 import '../../../modules/shortcuts/components/shortcuts_dialog.dart';
-import '../../../services/analytics/events/shortcuts_clicked.dart';
 import '../../../src/assets/assets.gen.dart';
 
 enum HeaderAction {
@@ -99,7 +97,6 @@ class _MoreActionsState extends State<MoreActions> {
               leading: SvgPicture.asset(Assets.shortcuts),
               title: Text(appLocale.shortcuts),
               onTap: () {
-                AnalyticsService.get(context).trackOpenShortcutsModal();
                 BeamDialog.show(
                   actions: [BeamCloseButton()],
                   context: context,
