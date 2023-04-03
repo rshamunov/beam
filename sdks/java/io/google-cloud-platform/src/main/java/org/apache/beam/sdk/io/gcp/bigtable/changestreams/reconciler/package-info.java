@@ -15,21 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.beam.sdk.io.gcp.spanner.changestreams.restriction;
+/** Partition reconciler for Google Cloud Bigtable Change Streams. */
+@Internal
+@Experimental
+package org.apache.beam.sdk.io.gcp.bigtable.changestreams.reconciler;
 
-/** This enum contains the states that PartitionRestrictionTracker will go through. */
-public enum PartitionMode {
-  // In this state, the restriction tracker will update the state of the input partition token
-  // from SCHEDULED to RUNNING.
-  UPDATE_STATE,
-  // In this state, the restriction tracker will execute a change stream query.
-  QUERY_CHANGE_STREAM,
-  // In this state, the restriction tracker will wait for the child partition SDFs to start
-  // running before terminating the SDF.
-  WAIT_FOR_CHILD_PARTITIONS,
-  // In this state, the restriction tracker will terminate the SDF.
-  DONE,
-
-  // Occurs when Dataflow checkpoints the current restriction.
-  STOP
-}
+import org.apache.beam.sdk.annotations.Experimental;
+import org.apache.beam.sdk.annotations.Internal;
