@@ -16,15 +16,14 @@
 package utils
 
 import (
+	"beam.apache.org/playground/backend/internal/logger"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
-
-	"beam.apache.org/playground/backend/internal/logger"
-	"gopkg.in/yaml.v3"
 )
 
 func ReduceWhiteSpacesToSinge(s string) string {

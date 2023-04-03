@@ -22,10 +22,10 @@ import (
 	"io/fs"
 	"os"
 
-	"beam.apache.org/playground/backend/internal/logger"
 	pb "beam.apache.org/playground/backend/internal/api/v1"
 	"beam.apache.org/playground/backend/internal/db/entity"
 	"beam.apache.org/playground/backend/internal/emulators"
+	"beam.apache.org/playground/backend/internal/logger"
 )
 
 const (

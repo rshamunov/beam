@@ -123,10 +123,6 @@ func findTestExecutableName(ctx context.Context, executableFileFolderPath string
 		case <-ctx.Done():
 			return "", ctx.Err()
 		default:
-			if err != nil {
-				logger.Error(fmt.Sprintf("error during file reading: %s", err.Error()))
-				break
-			}
 			ext := filepath.Ext(entry.Name())
 			filename := strings.TrimSuffix(entry.Name(), ext)
 

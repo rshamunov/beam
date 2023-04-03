@@ -114,7 +114,7 @@ func (b *CompileBuilder) WithFileNames(fileNames ...string) *CompileBuilder {
 	return b
 }
 
-//  WithExecutableFileNames adds file name to executor
+// WithExecutableFileNames adds file name to executor
 func (b *RunBuilder) WithExecutableFileNames(names ...string) *RunBuilder {
 	b.actions = append(b.actions, func(e *Executor) {
 		e.runArgs.fileNames = names

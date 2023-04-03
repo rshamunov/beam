@@ -97,14 +97,8 @@ func setup() {
 	if err != nil {
 		panic(err)
 	}
-	err = os.Setenv("BEAM_SDK", pb.Sdk_SDK_JAVA.String())
-	if err != nil {
-		panic(err)
-	}
-	err = os.Setenv("APP_WORK_DIR", path)
-	if err != nil {
-		panic(err)
-	}
+	os.Setenv("BEAM_SDK", pb.Sdk_SDK_JAVA.String())
+	os.Setenv("APP_WORK_DIR", path)
 
 	cacheService = local.New(context.Background())
 }
@@ -302,14 +296,14 @@ func Test_Process(t *testing.T) {
 			if tt.createExecFile {
 				_ = lc.CreateSourceCodeFiles(sources)
 			}
-			if err = utils.SetToCache(cacheService, tt.args.pipelineId, cache.Canceled, false); err != nil {
+			if err = utils.SetToCache(tt.args.ctx, cacheService, tt.args.pipelineId, cache.Canceled, false); err != nil {
 				t.Fatal("error during set cancel flag to cache")
 			}
 			if tt.cancelFunc {
 				go func(ctx context.Context, pipelineId uuid.UUID) {
 					// to imitate behavior of cancellation
 					time.Sleep(5 * time.Second)
-					_ = cacheService.SetValue(ctx, pipelineId, cache.Canceled, true)
+					cacheService.SetValue(ctx, pipelineId, cache.Canceled, true)
 				}(tt.args.ctx, tt.args.pipelineId)
 			}
 			Process(tt.args.ctx, cacheService, lc, tt.args.pipelineId, tt.args.appEnv, tt.args.sdkEnv, tt.args.pipelineOptions)
@@ -681,18 +675,9 @@ func setupSDK(sdk pb.Sdk) {
 		panic(err)
 	}
 
-	err = os.Setenv("BEAM_SDK", sdk.String())
-	if err != nil {
-		panic(err)
-	}
-	err = os.Setenv("APP_WORK_DIR", "")
-	if err != nil {
-		panic(err)
-	}
-	err = os.Setenv("PREPARED_MOD_DIR", "")
-	if err != nil {
-		panic(err)
-	}
+	os.Setenv("BEAM_SDK", sdk.String())
+	os.Setenv("APP_WORK_DIR", "")
+	os.Setenv("PREPARED_MOD_DIR", "")
 
 	cacheService = local.New(context.Background())
 }
@@ -746,7 +731,7 @@ func Benchmark_ProcessJava(b *testing.B) {
 		b.StopTimer()
 		pipelineId := uuid.New()
 		lc := prepareFiles(b, pipelineId, code, pb.Sdk_SDK_JAVA)
-		if err = utils.SetToCache(cacheService, pipelineId, cache.Canceled, false); err != nil {
+		if err = utils.SetToCache(ctx, cacheService, pipelineId, cache.Canceled, false); err != nil {
 			b.Fatal("error during set cancel flag to cache")
 		}
 		b.StartTimer()
@@ -776,7 +761,7 @@ func Benchmark_ProcessPython(b *testing.B) {
 		b.StopTimer()
 		pipelineId := uuid.New()
 		lc := prepareFiles(b, pipelineId, wordCountCode, pb.Sdk_SDK_PYTHON)
-		if err = utils.SetToCache(cacheService, pipelineId, cache.Canceled, false); err != nil {
+		if err = utils.SetToCache(ctx, cacheService, pipelineId, cache.Canceled, false); err != nil {
 			b.Fatal("error during set cancel flag to cache")
 		}
 		b.StartTimer()
@@ -806,7 +791,7 @@ func Benchmark_ProcessGo(b *testing.B) {
 		b.StopTimer()
 		pipelineId := uuid.New()
 		lc := prepareFiles(b, pipelineId, code, pb.Sdk_SDK_GO)
-		if err = utils.SetToCache(cacheService, pipelineId, cache.Canceled, false); err != nil {
+		if err = utils.SetToCache(ctx, cacheService, pipelineId, cache.Canceled, false); err != nil {
 			b.Fatal("error during set cancel flag to cache")
 		}
 		b.StartTimer()
@@ -879,6 +864,7 @@ func Test_validateStep(t *testing.T) {
 		sdkEnv               *environment.BeamEnvs
 		pipelineLifeCycleCtx context.Context
 		validationResults    *sync.Map
+		cancelChannel        chan bool
 	}
 	tests := []struct {
 		name string
@@ -895,6 +881,7 @@ func Test_validateStep(t *testing.T) {
 				sdkEnv:               javaSdkEnv,
 				pipelineLifeCycleCtx: context.Background(),
 				validationResults:    &sync.Map{},
+				cancelChannel:        make(chan bool, 1),
 			},
 			want: 3,
 			code: helloWordJava,
@@ -908,6 +895,7 @@ func Test_validateStep(t *testing.T) {
 				sdkEnv:               incorrectSdkEnv,
 				pipelineLifeCycleCtx: context.Background(),
 				validationResults:    &sync.Map{},
+				cancelChannel:        make(chan bool, 1),
 			},
 			want: 0,
 			code: helloWordJava,
@@ -922,9 +910,9 @@ func Test_validateStep(t *testing.T) {
 			}
 			sources := []entity.FileEntity{{Name: "main.java", Content: tt.code, IsMain: true}}
 			_ = lc.CreateSourceCodeFiles(sources)
-			err = validateStep(tt.args.pipelineLifeCycleCtx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.validationResults)
+			executor := validateStep(tt.args.ctx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.pipelineLifeCycleCtx, tt.args.validationResults, tt.args.cancelChannel)
 			got := syncMapLen(tt.args.validationResults)
-			if err != nil && !reflect.DeepEqual(got, tt.want) {
+			if executor != nil && !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("validateStep() = %d, want %d", got, tt.want)
 			}
 		})
@@ -943,8 +931,7 @@ func Test_prepareStep(t *testing.T) {
 	validationResults := sync.Map{}
 	validationResults.Store(validators.UnitTestValidatorName, false)
 	validationResults.Store(validators.KatasValidatorName, false)
-	pipelineLifeCycleCtx, cancel := context.WithTimeout(context.Background(), 1)
-	defer cancel()
+	pipelineLifeCycleCtx, _ := context.WithTimeout(context.Background(), 1)
 	type args struct {
 		ctx                  context.Context
 		cacheService         cache.Cache
@@ -952,6 +939,7 @@ func Test_prepareStep(t *testing.T) {
 		sdkEnv               *environment.BeamEnvs
 		pipelineLifeCycleCtx context.Context
 		validationResults    *sync.Map
+		cancelChannel        chan bool
 	}
 	tests := []struct {
 		name           string
@@ -968,6 +956,7 @@ func Test_prepareStep(t *testing.T) {
 				sdkEnv:               javaSdkEnv,
 				pipelineLifeCycleCtx: context.Background(),
 				validationResults:    &validationResults,
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           helloWordJava,
 			expectedStatus: pb.Status_STATUS_COMPILING,
@@ -981,6 +970,7 @@ func Test_prepareStep(t *testing.T) {
 				sdkEnv:               incorrectSdkEnv,
 				pipelineLifeCycleCtx: context.Background(),
 				validationResults:    &validationResults,
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           "",
 			expectedStatus: pb.Status_STATUS_ERROR,
@@ -994,6 +984,7 @@ func Test_prepareStep(t *testing.T) {
 				sdkEnv:               javaSdkEnv,
 				pipelineLifeCycleCtx: pipelineLifeCycleCtx,
 				validationResults:    &validationResults,
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           "",
 			expectedStatus: pb.Status_STATUS_RUN_TIMEOUT,
@@ -1008,7 +999,7 @@ func Test_prepareStep(t *testing.T) {
 			}
 			sources := []entity.FileEntity{{Name: "main.java", Content: tt.code, IsMain: true}}
 			_ = lc.CreateSourceCodeFiles(sources)
-			_ = prepareStep(tt.args.pipelineLifeCycleCtx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.validationResults, nil)
+			prepareStep(tt.args.ctx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.pipelineLifeCycleCtx, tt.args.validationResults, tt.args.cancelChannel, nil)
 			status, _ := cacheService.GetValue(tt.args.ctx, tt.args.pipelineId, cache.Status)
 			if status != tt.expectedStatus {
 				t.Errorf("prepareStep: got status = %v, want %v", status, tt.expectedStatus)
@@ -1026,8 +1017,7 @@ func Test_compileStep(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	pipelineLifeCycleCtx, cancel := context.WithTimeout(context.Background(), 1)
-	defer cancel()
+	pipelineLifeCycleCtx, _ := context.WithTimeout(context.Background(), 1)
 	type args struct {
 		ctx                  context.Context
 		cacheService         cache.Cache
@@ -1035,6 +1025,7 @@ func Test_compileStep(t *testing.T) {
 		sdkEnv               *environment.BeamEnvs
 		isUnitTest           bool
 		pipelineLifeCycleCtx context.Context
+		cancelChannel        chan bool
 	}
 	tests := []struct {
 		name           string
@@ -1051,6 +1042,7 @@ func Test_compileStep(t *testing.T) {
 				sdkEnv:               sdkJavaEnv,
 				isUnitTest:           false,
 				pipelineLifeCycleCtx: context.Background(),
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           helloWordJava,
 			expectedStatus: pb.Status_STATUS_EXECUTING,
@@ -1064,6 +1056,7 @@ func Test_compileStep(t *testing.T) {
 				sdkEnv:               sdkPythonEnv,
 				isUnitTest:           false,
 				pipelineLifeCycleCtx: context.Background(),
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           helloWordPython,
 			expectedStatus: pb.Status_STATUS_EXECUTING,
@@ -1077,6 +1070,7 @@ func Test_compileStep(t *testing.T) {
 				sdkEnv:               sdkJavaEnv,
 				isUnitTest:           false,
 				pipelineLifeCycleCtx: pipelineLifeCycleCtx,
+				cancelChannel:        make(chan bool, 1),
 			},
 			code:           helloWordJava,
 			expectedStatus: pb.Status_STATUS_RUN_TIMEOUT,
@@ -1091,7 +1085,7 @@ func Test_compileStep(t *testing.T) {
 			}
 			sources := []entity.FileEntity{{Name: "main.java", Content: tt.code, IsMain: true}}
 			_ = lc.CreateSourceCodeFiles(sources)
-			_ = compileStep(tt.args.pipelineLifeCycleCtx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.isUnitTest)
+			compileStep(tt.args.ctx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.sdkEnv, tt.args.isUnitTest, tt.args.pipelineLifeCycleCtx, tt.args.cancelChannel)
 			status, _ := cacheService.GetValue(tt.args.ctx, tt.args.pipelineId, cache.Status)
 			if status != tt.expectedStatus {
 				t.Errorf("compileStep: got status = %v, want %v", status, tt.expectedStatus)
@@ -1121,6 +1115,7 @@ func Test_runStep(t *testing.T) {
 		sdkEnv               *environment.BeamEnvs
 		pipelineOptions      string
 		pipelineLifeCycleCtx context.Context
+		cancelChannel        chan bool
 		createExecFile       bool
 	}
 	tests := []struct {
@@ -1142,6 +1137,7 @@ func Test_runStep(t *testing.T) {
 				sdkEnv:               sdkPythonEnv,
 				pipelineOptions:      "",
 				pipelineLifeCycleCtx: context.Background(),
+				cancelChannel:        make(chan bool, 1),
 				createExecFile:       true,
 			},
 			code:           helloWordPython,
@@ -1160,6 +1156,7 @@ func Test_runStep(t *testing.T) {
 				sdkEnv:               sdkGoEnv,
 				pipelineOptions:      "",
 				pipelineLifeCycleCtx: context.Background(),
+				cancelChannel:        make(chan bool, 1),
 				createExecFile:       true,
 			},
 			code:           helloWordGo,
@@ -1177,6 +1174,7 @@ func Test_runStep(t *testing.T) {
 				sdkEnv:               sdkJavaEnv,
 				pipelineOptions:      "",
 				pipelineLifeCycleCtx: context.Background(),
+				cancelChannel:        make(chan bool, 1),
 				createExecFile:       false,
 			},
 			code:           helloWordJava,
@@ -1194,7 +1192,7 @@ func Test_runStep(t *testing.T) {
 				sources := []entity.FileEntity{{Name: "main.java", Content: tt.code, IsMain: true}}
 				_ = lc.CreateSourceCodeFiles(sources)
 			}
-			_ = runStep(tt.args.pipelineLifeCycleCtx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.isUnitTest, tt.args.sdkEnv, tt.args.pipelineOptions)
+			runStep(tt.args.ctx, tt.args.cacheService, &lc.Paths, tt.args.pipelineId, tt.args.isUnitTest, tt.args.sdkEnv, tt.args.pipelineOptions, tt.args.pipelineLifeCycleCtx, tt.args.cancelChannel)
 			status, _ := cacheService.GetValue(tt.args.ctx, tt.args.pipelineId, cache.Status)
 			if status != tt.expectedStatus {
 				t.Errorf("runStep() got status = %v, want %v", status, tt.expectedStatus)
@@ -1320,7 +1318,7 @@ func Test_processSetupError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mocks()
-			if err := processSetupError(tt.args.err, tt.args.pipelineId, tt.args.cacheService); (err != nil) != tt.wantErr {
+			if err := processSetupError(tt.args.err, tt.args.pipelineId, tt.args.cacheService, tt.args.ctxWithTimeout); (err != nil) != tt.wantErr {
 				t.Errorf("processSetupError() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -1369,7 +1367,7 @@ func Test_processErrorWithSavingOutput(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mocks()
-			if err := processErrorWithSavingOutput(tt.args.err, tt.args.errorOutput, tt.args.pipelineId, tt.args.subKey, tt.args.cacheService, tt.args.errorTitle, tt.args.newStatus); (err != nil) != tt.wantErr {
+			if err := processErrorWithSavingOutput(tt.args.ctx, tt.args.err, tt.args.errorOutput, tt.args.pipelineId, tt.args.subKey, tt.args.cacheService, tt.args.errorTitle, tt.args.newStatus); (err != nil) != tt.wantErr {
 				t.Errorf("processErrorWithSavingOutput() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -1418,7 +1416,7 @@ func Test_processRunError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mocks()
-			if err := processRunError(tt.args.errorChannel, tt.args.errorOutput, tt.args.pipelineId, tt.args.cacheService, tt.args.stopReadLogsChannel, tt.args.finishReadLogsChannel); (err != nil) != tt.wantErr {
+			if err := processRunError(tt.args.ctx, tt.args.errorChannel, tt.args.errorOutput, tt.args.pipelineId, tt.args.cacheService, tt.args.stopReadLogsChannel, tt.args.finishReadLogsChannel); (err != nil) != tt.wantErr {
 				t.Errorf("processRunError() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -1522,7 +1520,7 @@ func Test_processCompileSuccess(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mocks()
-			if err := processCompileSuccess(tt.args.output, tt.args.pipelineId, tt.args.cacheService); (err != nil) != tt.wantErr {
+			if err := processCompileSuccess(tt.args.ctx, tt.args.output, tt.args.pipelineId, tt.args.cacheService); (err != nil) != tt.wantErr {
 				t.Errorf("processCompileSuccess() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -1530,8 +1528,7 @@ func Test_processCompileSuccess(t *testing.T) {
 }
 
 func Test_readGraphFile(t *testing.T) {
-	pipelineLifeCycleCtx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
+	pipelineLifeCycleCtx, _ := context.WithTimeout(context.Background(), 1*time.Second)
 	type args struct {
 		pipelineLifeCycleCtx context.Context
 		backgroundCtx        context.Context
@@ -1556,7 +1553,7 @@ func Test_readGraphFile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			readGraphFile(tt.args.pipelineLifeCycleCtx, tt.args.cacheService, tt.args.graphFilePath, tt.args.pipelineId)
+			readGraphFile(tt.args.pipelineLifeCycleCtx, tt.args.backgroundCtx, tt.args.cacheService, tt.args.graphFilePath, tt.args.pipelineId)
 			if v, _ := cacheService.GetValue(tt.args.backgroundCtx, tt.args.pipelineId, cache.Graph); v == nil {
 				t.Errorf("readGraphFile() error: the graph was not cached")
 			}
