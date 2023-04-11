@@ -20,48 +20,52 @@ variable "project_id" {
 }
 
 variable "pg_infra_trigger_name" {
-  description = "The name of the trigger that will deploy Playground infrastructure"
-  default     = "Initialize-Playground-environment"
+  description = "Trigger name to deploy Playground infrastructure"
+  default     = "Initialize-Playground-Environment"
 }
 
 variable "pg_gke_trigger_name" {
-  description = "The name of the trigger that will deploy Playground to GKE"
-  default     = "Deploy-Playground-environment"
+  description = "Trigger name to deploy GKE for Playground"
+  default     = "Deploy-Playground-Environment"
 }
 
 variable "pg_helm_upd_trigger_name" {
-  description = "The name of the trigger that run Helm update"
-  default     = "Update-Playground-environment"
+  description = "Trigger name to update Playground environment"
+  default     = "Update-Playground-Environment"
 }
 
 variable "pg_ci_trigger_name" {
-  description = "The name of the trigger to run CI checks"
-  default = "Validate-examples-CI"
+  description = "Trigger name to run CI validation"
+  default = "Validate-Examples-CI"
 }
 
 variable "pg_cd_trigger_name" {
-  description = "The name of the trigger to run CD checks"
-  default = "Deploy-examples-CD"
+  description = "Trigger name to run CD checks"
+  default = "Deploy-Examples-CD"
 }
 
 variable "playground_deploy_sa" {
-  description = "The ID of the cloud build service account responsible for deploying the Playground"
+  description = "Service Account ID responsible for deploying the Playground"
 }
 
 variable "playground_helm_upd_sa" {
-  description = "The ID of the cloud build service account responsible for updating the Helm"
+  description = "Service Account ID responsible for Playground environment updates"
 }
 
-variable "playground_cicd_sa" {
-  description = "The ID of the cloud build service account responsible for running CI/CD checks and scripts"
+variable "playground_ci_sa" {
+  description = "Service Account ID responsible for running CI (examples validation)"
+}
+
+variable "playground_cd_sa" {
+  description = "Service Account ID responsible for running CD (examples integration)"
 }
 
 variable "playground_environment_name" {
-  description = "An environment name which will have it is own configuration of Playground"
+  description = "Playground environment name. Multiple environments can be deployed to the same GCP project."
 }
 
 variable "playground_dns_name" {
-  description = "The DNS A-record name for Playground website"
+  description = "The DNS A-record (FQDN) for Playground website"
 }
 
 variable "playground_network_name" {
@@ -152,14 +156,14 @@ variable "gh_pat_secret" {
   description = "The name of the secret for GitHub Personal Access Token. Required for cloud build trigger (CI/CD)"
 }
 
-variable "data_for_cicd_webhook_secret" {
-  description = "Data for cloud build CI/CD secret. Required for secret functionality. Any value can be set"
+variable "data_for_ci_webhook_secret" {
+  description = "Secret value for Cloud Build WebHook trigger"
 }
 
 variable "data_for_github_pat_secret" {
-  description = "The GitHub generated Personal Access Token value"
+  description = "The GitHub account Personal Access Token"
 }
 
 variable "private_logs_bucket" {
-  description = "The GCS bucket name to store CI logs privately"
+  description = "The GCS bucket name to store triggers logs"
 }

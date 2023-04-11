@@ -1,4 +1,5 @@
-resource "google_secret_manager_secret" "secret_webhook_cloudbuild_trigger_cicd" {
+# Secret for Cloud Build WebHook trigger
+resource "google_secret_manager_secret" "secret_webhook_cloudbuild_trigger_ci" {
   secret_id = var.webhook_trigger_secret_id
 
   replication {
@@ -6,6 +7,7 @@ resource "google_secret_manager_secret" "secret_webhook_cloudbuild_trigger_cicd"
   }
 }
 
+# PAT for GitHub account used to write commit messages for CI checks
 resource "google_secret_manager_secret" "secret_gh_pat_cloudbuild" {
   secret_id = var.gh_pat_secret
 
@@ -14,9 +16,9 @@ resource "google_secret_manager_secret" "secret_gh_pat_cloudbuild" {
   }
 }
 
-resource "google_secret_manager_secret_version" "secret_webhook_cloudbuild_trigger_cicd_data" {
-  secret = google_secret_manager_secret.secret_webhook_cloudbuild_trigger_cicd.id
-  secret_data = var.data_for_cicd_webhook_secret
+resource "google_secret_manager_secret_version" "secret_webhook_cloudbuild_trigger_ci_data" {
+  secret = google_secret_manager_secret.secret_webhook_cloudbuild_trigger_ci.id
+  secret_data = var.data_for_ci_webhook_secret
 }
 
 resource "google_secret_manager_secret_version" "secret_gh_pat_cloudbuild_data" {

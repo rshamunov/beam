@@ -14,13 +14,14 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
+/*
 resource "google_cloudbuild_trigger" "playground_infrastructure" {
   name     = var.pg_infra_trigger_name
   project  = var.project_id
 
   description = "Creates cloud build manual trigger to deploy Playground infrastructure"
 
+  # Any repo can be connected.  We don't utilise it. Cloud Build requirement for manual triggers.
   source_to_build {
     uri       = "https://github.com/beamplayground/deploy-workaround"
     ref       = "refs/heads/master"
@@ -55,7 +56,8 @@ resource "google_cloudbuild_trigger" "playground_infrastructure" {
 
   service_account = data.google_service_account.playground_infra_deploy_sa.id
 }
-
+*/
+/*
 resource "google_cloudbuild_trigger" "playground_to_gke" {
   name     = var.pg_gke_trigger_name
   project  = var.project_id
@@ -100,7 +102,7 @@ resource "google_cloudbuild_trigger" "playground_to_gke" {
 
   service_account = data.google_service_account.playground_infra_deploy_sa.id
 }
-
+*/
 resource "google_cloudbuild_trigger" "playground_helm_update" {
   name     = var.pg_helm_upd_trigger_name
   project  = var.project_id
@@ -161,7 +163,7 @@ resource "google_cloudbuild_trigger" "playground_ci" {
   build {
     step {
       name = "bash"
-      args = ["-c", "echo 'Hello, world!'"]
+      args = ["-c", "echo 'Copy the script from YAML file'"]
     }
   }
 
@@ -188,7 +190,7 @@ resource "google_cloudbuild_trigger" "playground_cd" {
   build {
     step {
       name = "bash"
-      args = ["-c", "echo 'Hello, world!'"]
+      args = ["-c", "echo 'Copy the script from YAML file'"]
     }
   }
 
