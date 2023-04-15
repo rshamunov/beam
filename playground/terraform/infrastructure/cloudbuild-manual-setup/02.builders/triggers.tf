@@ -157,7 +157,7 @@ resource "google_cloudbuild_trigger" "playground_ci" {
   service_account = data.google_service_account.playground_ci_sa.id
 
   webhook_config {
-    secret = google_secret_manager_secret_version.webhook_trigger_secret_id.id
+    secret = google_secret_manager_secret_version.secret_webhook_cloudbuild_trigger_cicd_data.id
   }
 
   build {
@@ -184,7 +184,7 @@ resource "google_cloudbuild_trigger" "playground_cd" {
   service_account = data.google_service_account.playground_cd_sa.id
 
   webhook_config {
-    secret = google_secret_manager_secret_version.webhook_trigger_secret_id.id
+    secret = google_secret_manager_secret_version.secret_webhook_cloudbuild_trigger_cicd_data.id
   }
 
   build {

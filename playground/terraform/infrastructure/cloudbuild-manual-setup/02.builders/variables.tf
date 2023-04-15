@@ -156,7 +156,7 @@ variable "gh_pat_secret" {
   description = "The name of the secret for GitHub Personal Access Token. Required for cloud build trigger (CI/CD)"
 }
 
-variable "data_for_ci_webhook_secret" {
+variable "data_for_cicd_webhook_secret" {
   description = "Secret value for Cloud Build WebHook trigger"
 }
 
