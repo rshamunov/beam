@@ -26,13 +26,13 @@ resource "google_secret_manager_secret_version" "secret_gh_pat_cloudbuild_data" 
   secret_data = var.data_for_github_pat_secret
 }
 
-resource "google_project_iam_binding" "secret_webhook_cloudbuild_trigger_cicd_access" {
+resource "google_secret_manager_secret_iam_binding" "secret_webhook_cloudbuild_trigger_cicd_access" {
   project = var.project_id
-  secret_id = google_secret_manager_secret.secret_webhook_cloudbuild_trigger_cicd.secret_id
+  secret_id = google_secret_manager_secret.secret_webhook_cloudbuild_trigger_cicd.id
   role    = "roles/secretmanager.secretAccessor"
 
   members = [
-    "serviceAccount:${google_service_account.playground_ci_sa.email}",
-    "serviceAccount:${google_service_account.playground_cd_sa.email}"
+    "serviceAccount:${data.google_service_account.playground_ci_sa.account_id}",
+    "serviceAccount:${data.google_service_account.playground_cd_sa.account_id}"
   ]
 }
